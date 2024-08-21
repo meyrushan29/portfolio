@@ -1,19 +1,19 @@
 import { HERO_CONTENT } from "../constants";
 import ProfilePic from '../assets/Profile.png';
-import {motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const container = (delay) => ({
-  hidden:{x:-100,opacity:0},
-  visible:{
-    x:0,
-    opacity:1,
-    transition:{duration:0.5,delay:delay},
-  }
-})
+  hidden: { x: -100, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.5, delay: delay },
+  },
+});
 
 const Hero = () => {
   return (
-    <div className="border-b border-neutral-900 pb-4 lg:mb-35">
+    <div className="border-b border-neutral-900 pb-2 lg:mb-35">
       <div className="flex flex-wrap justify-center">
         <div className="w-full lg:w-1/2">
           <div className="flex flex-col items-center lg:items-start">
@@ -41,6 +41,17 @@ const Hero = () => {
             >
               {HERO_CONTENT}
             </motion.p>
+            <motion.a
+              variants={container(1.5)}
+             initial="hidden"
+            animate="visible"
+               href="resume/Meyrushan_Nadarajan_Resume.pdf" 
+               download="resume/Meyrushan_Nadarajan_Resume.pdf"
+              className="bg-gradient-to-r from-pink-300 via-slate-500 to-purple-500 px-6 py-3 rounded-md text-white hover:bg-gradient-to-r hover:from-pink-400 hover:via-slate-600 hover:to-purple-600 transition-colors duration-300"
+             >
+            Download Resume
+            </motion.a>
+
           </div>
         </div>
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:p-0">
