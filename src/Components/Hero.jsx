@@ -38,7 +38,7 @@ const Hero = () => {
                 variants={container(1.5)}
                 initial="hidden"
                 animate="visible"
-                href="resume/Meyrushan_Nadarajan_Resume.pdf"
+                href="resume/Meyrushan Nadarajan Resume .pdf.pdf"
                 download="resume/Meyrushan_Nadarajan_Resume.pdf"
                 className="bg-gradient-to-r from-pink-300 via-slate-500 to-purple-500 px-6 py-2 rounded-md text-white hover:bg-gradient-to-r hover:from-pink-400 hover:via-slate-600 hover:to-purple-600 transition-colors duration-300 mr-4 mb-4 lg:mb-0"
               >
