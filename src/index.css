@@ -1,10 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=PT+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
-  font-family: "Inter",sans-serif;
+  font-family: "Outfit", sans-serif;
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    @apply bg-neutral-950 text-neutral-300 antialiased selection:bg-cyan-500/30 selection:text-cyan-200;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-700 rounded-full hover:bg-neutral-600 transition-colors;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-neutral-900/50 backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-lg;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-cyan-300 via-slate-500 to-purple-500 bg-clip-text text-transparent;
+  }
 }
