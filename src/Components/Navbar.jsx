@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { FaLinkedin, FaGithub, FaBars, FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";
 import { CONTACT } from "../constants";
-import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { name: "About", href: "#about" },
@@ -48,12 +47,10 @@ const Navbar = () => {
         <div className="hidden md:flex items-center justify-center gap-4 text-xl">
           <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-body hover:text-cyan-400 transition-colors"><FaLinkedin /></a>
           <a href={CONTACT.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-body hover:text-cyan-400 transition-colors"><FaGithub /></a>
-          <ThemeToggle />
         </div>
 
         {/* Mobile controls */}
         <div className="flex md:hidden items-center gap-3">
-          <ThemeToggle />
           <button
             onClick={() => setIsMenuOpen((v) => !v)}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}

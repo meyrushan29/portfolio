@@ -7,19 +7,6 @@
 
 :root {
   font-family: "Outfit", sans-serif;
-  color-scheme: dark;
-
-  --bg: 10 10 10;
-  --surface: 23 23 23;
-  --surface-alt: 38 38 38;
-  --line: 38 38 38;
-  --line-strong: 64 64 64;
-  --ink: 245 245 245;
-  --body: 212 212 212;
-  --faint: 163 163 163;
-}
-
-:root.light {
   color-scheme: light;
 
   --bg: 255 255 255;
@@ -34,10 +21,7 @@
 
 @layer base {
   body {
-    @apply bg-bg text-body antialiased selection:bg-cyan-500/30 selection:text-cyan-700;
-  }
-  :root.light body {
-    @apply selection:text-cyan-900;
+    @apply bg-bg text-body antialiased selection:bg-cyan-500/30 selection:text-cyan-900;
   }
 
   /* Custom Scrollbar */
