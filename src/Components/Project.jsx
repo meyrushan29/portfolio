@@ -108,7 +108,7 @@ const ProjectCard = ({ project, index }) => (
       <ProjectLinks project={project} />
     </div>
 
-    <h3 className="mb-1 text-xl font-bold bg-gradient-to-r from-neutral-100 to-neutral-400 bg-clip-text text-transparent">{project.title}</h3>
+    <h3 className="mb-1 text-xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">{project.title}</h3>
     {project.subtitle && <p className="mb-2 text-xs text-purple-400 font-medium">{project.subtitle}</p>}
     <p className="mb-4 text-faint text-sm line-clamp-3">{project.description}</p>
     <div className="mt-auto">

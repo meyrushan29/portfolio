@@ -26,7 +26,7 @@ const TechItem = ({ Icon, color, duration, name }) => (
     variants={iconVariants(duration)}
     initial="initial"
     animate="animate"
-    className="rounded-2xl border-4 border-line p-4 transition-colors hover:border-line-strong bg-surface/50"
+    className="rounded-2xl border-2 border-line p-4 transition-colors hover:border-cyan-400 bg-surface shadow-sm"
     title={name}
   >
     <Icon className={`text-5xl sm:text-6xl ${color}`} />
@@ -50,7 +50,7 @@ const SKILL_CATEGORIES = [
     name: "Backend",
     items: [
       { Icon: FaNodeJs, color: "text-green-500", duration: 4, name: "Node.js" },
-      { Icon: SiExpress, color: "text-neutral-300", duration: 3, name: "Express.js" },
+      { Icon: SiExpress, color: "text-neutral-700", duration: 3, name: "Express.js" },
       { Icon: SiFastapi, color: "text-teal-400", duration: 3.5, name: "FastAPI" },
       { Icon: SiSpringboot, color: "text-green-600", duration: 3, name: "Spring Boot" },
       { Icon: FaJava, color: "text-orange-500", duration: 5, name: "Java" },

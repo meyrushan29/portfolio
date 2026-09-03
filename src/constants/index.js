@@ -5,9 +5,9 @@ import hydrationImg from "../assets/Well360_Demo/well360-poster.png";
 import hydrationVideo from "../assets/Well360_Demo/well360-demo.mp4";
 import certificateImg from "../assets/Publication_Certificate.png";
 
-export const HERO_CONTENT = `I am a passionate Full Stack Developer and final-year B.Sc. (Honours) IT student at SLIIT, with professional experience in building scalable and secure web applications. I specialize in crafting intuitive front-end interfaces with React, Next.js, and Tailwind CSS, while architecting robust backend solutions using Node.js, Express.js, FastAPI, and Spring Boot. My goal is to deliver high-quality, performance-optimized, and innovative software solutions.`;
+export const HERO_CONTENT = `I am a passionate Full Stack Developer and B.Sc. (Honours) IT graduate from SLIIT, with professional experience in building scalable and secure web applications. I specialize in crafting intuitive front-end interfaces with React, Next.js, and Tailwind CSS, while architecting robust backend solutions using Node.js, Express.js, FastAPI, and Spring Boot. My goal is to deliver high-quality, performance-optimized, and innovative software solutions.`;
 
-export const ABOUT_TEXT = `I am a results-driven Full Stack Developer with hands-on expertise in the MERN stack, Java Spring, and Python/FastAPI. I worked as an Associate Software Engineer at D-Gateway Innovations, developing and maintaining full-stack web applications and optimizing RESTful APIs and database queries in Agile/Scrum teams. Alongside industry experience, I am completing my B.Sc. (Honours) in Information Technology at SLIIT, where my final-year research on AI-powered hydration monitoring was accepted for presentation at CISCON 2026. I thrive on solving complex problems, building production-grade systems end to end, and continuously learning new technologies to stay at the forefront of the industry.`;
+export const ABOUT_TEXT = `I am a results-driven Full Stack Developer with hands-on expertise in the MERN stack, Java Spring, and Python/FastAPI. I worked as an Associate Software Engineer at D-Gateway Innovations, developing and maintaining full-stack web applications and optimizing RESTful APIs and database queries in Agile/Scrum teams. I hold a B.Sc. (Honours) in Information Technology from SLIIT, where my final-year research on AI-powered hydration monitoring was accepted for presentation at CISCON 2026. I thrive on solving complex problems, building production-grade systems end to end, and continuously learning new technologies to stay at the forefront of the industry.`;
 
 export const EDUCATION = [
   {
@@ -120,7 +120,7 @@ export const PROJECTS = [
 ];
 
 export const CONTACT = {
-  address: "Malwatta-01, Sri Lanka",
+  address: "Colombo, Sri Lanka",
   phoneNo: "+94 77 630 9171",
   email: "meyrushan29@gmail.com",
   linkedin: "https://www.linkedin.com/in/meyrushan-nadarajan",

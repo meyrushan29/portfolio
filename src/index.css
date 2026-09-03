@@ -9,14 +9,14 @@
   font-family: "Outfit", sans-serif;
   color-scheme: light;
 
-  --bg: 255 255 255;
+  --bg: 244 245 248;
   --surface: 255 255 255;
-  --surface-alt: 244 244 245;
-  --line: 228 228 231;
-  --line-strong: 212 212 216;
-  --ink: 24 24 27;
-  --body: 63 63 70;
-  --faint: 82 82 91;
+  --surface-alt: 236 238 242;
+  --line: 203 209 217;
+  --line-strong: 156 163 175;
+  --ink: 17 24 39;
+  --body: 55 65 81;
+  --faint: 100 108 120;
 }
 
 @layer base {
@@ -38,7 +38,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-surface/50 backdrop-blur-xl border border-line rounded-2xl shadow-lg;
+    @apply bg-surface/90 backdrop-blur-xl border border-line rounded-2xl shadow-lg;
   }
   .gradient-text {
     @apply bg-gradient-to-r from-cyan-300 via-slate-500 to-purple-500 bg-clip-text text-transparent;
