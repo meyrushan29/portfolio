@@ -2,9 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/resume/about.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meyrushan</title>
+    <meta name="description" content="Meyrushan Nadarajan - Software Engineer & AI Developer specializing in full-stack web development, mobile apps, and applied machine learning." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Meyrushan Nadarajan | Software Engineer & AI Developer" />
+    <meta property="og:description" content="Software Engineer, Full-Stack Developer, and AI & Mobile Technology builder - portfolio, projects, and research." />
+    <meta property="og:image" content="/resume/Profile.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Meyrushan Nadarajan | Software Engineer & AI Developer</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = stored === 'light' || stored === 'dark'
+            ? stored
+            : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          if (theme === 'light') document.documentElement.classList.add('light');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

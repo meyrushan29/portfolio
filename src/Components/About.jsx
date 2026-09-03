@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 
 const About = () => {
   return (
-    <div id="about" className="border-b border-neutral-900 pb-24">
-      <h2 className="my-20 text-center text-4xl font-light">
+    <div id="about" className="border-b border-line pb-24">
+      <h2 className="my-20 text-center text-4xl font-light text-ink">
         About <span className="bg-gradient-to-r from-cyan-300 to-purple-500 bg-clip-text text-transparent font-medium">Me</span>
       </h2>
       <div className="flex flex-wrap items-center">
@@ -17,7 +17,7 @@ const About = () => {
         >
           <div className="flex items-center justify-center relative">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-500 blur-2xl opacity-20 rounded-full"></div>
-            <img className="relative z-10 rounded-2xl shadow-xl border border-neutral-800" src={aboutImg} alt="About" />
+            <img className="relative z-10 rounded-2xl shadow-xl border border-line" src={aboutImg} alt="Meyrushan Nadarajan at work" />
           </div>
         </motion.div>
 
@@ -28,7 +28,7 @@ const About = () => {
           className="w-full lg:w-1/2"
         >
           <div className="flex justify-center lg:justify-start">
-            <p className='my-2 max-w-xl py-6 leading-loose text-neutral-300 glass-card p-6 border-none bg-neutral-900/40'>
+            <p className='my-2 max-w-xl py-6 leading-loose text-body glass-card p-6 border-none bg-surface/40'>
               {ABOUT_TEXT}
             </p>
           </div>
