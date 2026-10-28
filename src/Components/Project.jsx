@@ -1,4 +1,4 @@
-import { PROJECTS } from "../constants";
+import { useProjects } from "../lib/projects";
 import { FaGithub, FaExternalLinkAlt, FaCheck } from "react-icons/fa";
 import SectionHeading from "./SectionHeading";
 
@@ -95,8 +95,9 @@ const ProjectRow = ({ project }) => (
 );
 
 const Project = () => {
-  const featured = PROJECTS.find((p) => p.featured);
-  const rest = PROJECTS.filter((p) => !p.featured);
+  const projects = useProjects();
+  const featured = projects?.find((p) => p.featured);
+  const rest = projects?.filter((p) => p !== featured) ?? [];
 
   return (
     <section id="projects" className="border-t border-line py-24 lg:py-32">
@@ -104,12 +105,18 @@ const Project = () => {
         title="Projects"
         intro="Production systems and research builds, from real-time quiz engines to role-scoped business platforms."
       />
-      {featured && <FeaturedProject project={featured} />}
-      <div className="mt-16">
-        {rest.map((project) => (
-          <ProjectRow key={project.title} project={project} />
-        ))}
-      </div>
+      {!projects ? (
+        <div aria-busy="true" aria-label="Loading projects" className="h-[480px] animate-pulse rounded-[2rem] bg-surface-alt" />
+      ) : (
+        <>
+          {featured && <FeaturedProject project={featured} />}
+          <div className="mt-16">
+            {rest.map((project) => (
+              <ProjectRow key={project.id || project.title} project={project} />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 };
