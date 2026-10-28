@@ -5,9 +5,11 @@ import hydrationImg from "../assets/Well360_Demo/well360-poster.png";
 import hydrationVideo from "../assets/Well360_Demo/well360-demo.mp4";
 import certificateImg from "../assets/Publication_Certificate.png";
 
-export const HERO_CONTENT = `I am a passionate Full Stack Developer and B.Sc. (Honours) IT graduate from SLIIT, with professional experience in building scalable and secure web applications. I specialize in crafting intuitive front-end interfaces with React, Next.js, and Tailwind CSS, while architecting robust backend solutions using Node.js, Express.js, FastAPI, and Spring Boot. My goal is to deliver high-quality, performance-optimized, and innovative software solutions.`;
+export const HERO_ROLE = "Software engineer building full-stack web, mobile and applied-ML products.";
 
-export const ABOUT_TEXT = `I am a results-driven Full Stack Developer with hands-on expertise in the MERN stack, Java Spring, and Python/FastAPI. I worked as an Associate Software Engineer at D-Gateway Innovations, developing and maintaining full-stack web applications and optimizing RESTful APIs and database queries in Agile/Scrum teams. I hold a B.Sc. (Honours) in Information Technology from SLIIT, where my final-year research on AI-powered hydration monitoring was accepted for presentation at CISCON 2026. I thrive on solving complex problems, building production-grade systems end to end, and continuously learning new technologies to stay at the forefront of the industry.`;
+export const HERO_CONTENT = `B.Sc. (Honours) IT graduate from SLIIT with industry experience shipping scalable, secure web applications. I build interfaces in React, Next.js and Tailwind CSS, and back them with Node.js, Express.js, FastAPI and Spring Boot services.`;
+
+export const ABOUT_TEXT = `I am a results-driven Full Stack Developer with hands-on expertise in the MERN stack, Java Spring, and Python/FastAPI. I worked as an Associate Software Engineer at D-Gateway Innovations, developing and maintaining full-stack web applications and optimizing RESTful APIs and database queries in Agile/Scrum teams. I hold a B.Sc. (Honours) in Information Technology from SLIIT, where my final-year research on AI-powered hydration monitoring was presented at CISCON 2026 and is now published in IEEE Xplore. I thrive on solving complex problems, building production-grade systems end to end, and continuously learning new technologies to stay at the forefront of the industry.`;
 
 export const EDUCATION = [
   {
@@ -28,8 +30,21 @@ export const PUBLICATIONS = [
   {
     year: "2026",
     title: "Sub-Daily Hydration Forecasting and Lip-Based Dehydration Detection for Personalized Mobile Health Monitoring",
-    venue: "CISCON 2026 - XXIII Control Instrumentation Systems Conference, Manipal, India",
+    venue: "2026 XXIII Control Instrumentation Systems Conference (CISCON), Manipal, India",
+    status: "Published in IEEE Xplore",
     description: "Presented 7-8 August 2026. Technically co-sponsored by the IEEE Bengaluru Section and Mangalore Subsection.",
+    doi: "10.1109/CISCON71603.2026.11709086",
+    url: "https://ieeexplore.ieee.org/document/11709086",
+    highlights: [
+      {
+        title: "Sub-daily forecasting",
+        text: "An XGBoost model forecasts personal hydration needs across the day, with SHAP explaining each prediction.",
+      },
+      {
+        title: "Lip-based detection",
+        text: "A MobileNetV2 classifier detects dehydration from lip images, with Grad-CAM showing which regions drove the result.",
+      },
+    ],
     certificate: "/publication/CISCON_2026_Certificate.pdf",
     certificateImage: certificateImg,
   },
@@ -59,7 +74,7 @@ export const PROJECTS = [
     featured: true,
     image: hydrationImg,
     video: hydrationVideo,
-    description: "Final-year research project: a mobile hydration-monitoring app with a user-centred interface, applying machine learning to forecast hydration needs and detect dehydration from lip imagery. Basis of the CISCON 2026 conference paper on sub-daily hydration forecasting and lip-based dehydration detection.",
+    description: "Final-year research project: a mobile hydration-monitoring app with a user-centred interface, applying machine learning to forecast hydration needs and detect dehydration from lip imagery. Basis of the CISCON 2026 paper on sub-daily hydration forecasting and lip-based dehydration detection, now published in IEEE Xplore.",
     features: [
       "Sub-daily hydration forecasting model",
       "Lip-based dehydration detection via MobileNetV2 with Grad-CAM visual explanations",
@@ -68,6 +83,7 @@ export const PROJECTS = [
       "Flutter mobile app backed by a Python service",
     ],
     technologies: ["Flutter", "Dart", "Python", "XGBoost", "PyTorch", "MobileNetV2", "SHAP", "Grad-CAM"],
+    paper: "https://ieeexplore.ieee.org/document/11709086",
     github: "",
     demo: "",
   },

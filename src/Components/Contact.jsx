@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { CONTACT } from "../constants"
-import { motion } from "framer-motion";
-import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaPaperPlane } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaPaperPlane } from "react-icons/fa";
+
+const inputClass = "w-full rounded-xl border border-line bg-bg px-4 py-3 text-ink placeholder:text-faint/80 transition-colors focus:border-accent focus:outline-none";
 
 const Contact = () => {
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error | unconfigured
@@ -32,110 +33,65 @@ const Contact = () => {
   };
 
   return (
-   <div id="contact" className="border-b border-line pb-24 pt-10">
-    <motion.h2
-      whileInView={{opacity:1 ,y:0}}
-      initial={{opacity:0,y:-100}}
-      transition={{duration:0.5}}
-      className="my-10 text-center text-4xl font-light text-ink"
-    >
-      Get in <span className="text-cyan-400 font-medium">Touch</span>
-    </motion.h2>
-
-    <div className="flex flex-col lg:flex-row gap-12 max-w-4xl mx-auto">
-      <motion.div
-        whileInView={{opacity:1 ,x:0}}
-        initial={{opacity:0,x:-100}}
-        transition={{duration:0.8}}
-        className="lg:w-2/5 flex flex-col gap-6"
-      >
-        <div className="flex items-center gap-4 text-body">
-           <FaMapMarkerAlt className="text-cyan-500 flex-shrink-0" />
-           <p>{CONTACT.address}</p>
-        </div>
-        <div className="flex items-center gap-4 text-body">
-           <FaPhone className="text-cyan-500 flex-shrink-0" />
-           <p>{CONTACT.phoneNo}</p>
-        </div>
+   <section id="contact" className="border-t border-line py-24 lg:py-32">
+    <div className="grid gap-14 lg:grid-cols-12">
+      <div className="lg:col-span-6">
+        <h2 className="font-display text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-ink sm:text-6xl">
+          Let&apos;s work together
+        </h2>
+        <p className="mt-6 max-w-md text-lg leading-relaxed text-faint">
+          I&apos;m open to software engineering roles and research collaborations. Email is the fastest way to reach me.
+        </p>
         <a
           href={`mailto:${CONTACT.email}`}
-          className="flex items-center gap-4 text-body hover:text-cyan-400 transition-colors w-fit"
+          className="mt-8 inline-block break-all font-display text-2xl font-medium text-accent underline decoration-accent/30 decoration-2 underline-offset-[6px] hover:decoration-accent sm:text-3xl"
         >
-          <FaEnvelope className="text-cyan-500 flex-shrink-0" />
           {CONTACT.email}
         </a>
-        <div className="flex items-center gap-4 pt-2">
-          <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="flex items-center justify-center w-10 h-10 rounded-full border border-line text-body hover:text-cyan-400 hover:border-cyan-400/50 transition-colors text-lg">
-            <FaLinkedin />
-          </a>
-          <a href={CONTACT.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="flex items-center justify-center w-10 h-10 rounded-full border border-line text-body hover:text-cyan-400 hover:border-cyan-400/50 transition-colors text-lg">
-            <FaGithub />
-          </a>
-        </div>
-      </motion.div>
+        <ul className="mt-10 flex flex-col gap-4 text-body">
+          <li className="flex items-center gap-3"><FaMapMarkerAlt className="text-faint" />{CONTACT.address}</li>
+          <li className="flex items-center gap-3"><FaPhone className="text-faint" /><a href={`tel:${CONTACT.phoneNo.replace(/\s/g, "")}`} className="hover:text-accent">{CONTACT.phoneNo}</a></li>
+          <li className="flex items-center gap-3"><FaLinkedin className="text-faint" /><a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-accent">LinkedIn</a></li>
+          <li className="flex items-center gap-3"><FaGithub className="text-faint" /><a href={CONTACT.github} target="_blank" rel="noopener noreferrer" className="hover:text-accent">GitHub</a></li>
+        </ul>
+      </div>
 
-      <motion.form
-        whileInView={{opacity:1 ,y:0}}
-        initial={{opacity:0,y:50}}
-        transition={{duration:0.8}}
+      <form
         onSubmit={handleSubmit}
-        className="lg:w-3/5 glass-card p-6 flex flex-col gap-4"
+        className="flex flex-col gap-5 self-start rounded-[2rem] border border-line bg-surface p-6 sm:p-8 lg:col-span-6"
       >
         <div>
-          <label htmlFor="name" className="block text-sm text-faint mb-1">Name</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            className="w-full rounded-lg bg-surface-alt border border-line px-4 py-2.5 text-body placeholder:text-faint focus:outline-none focus:border-cyan-400 transition-colors"
-            placeholder="Your name"
-          />
+          <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-ink">Name</label>
+          <input id="name" name="name" type="text" required autoComplete="name" className={inputClass} placeholder="Your name" />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm text-faint mb-1">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            className="w-full rounded-lg bg-surface-alt border border-line px-4 py-2.5 text-body placeholder:text-faint focus:outline-none focus:border-cyan-400 transition-colors"
-            placeholder="you@example.com"
-          />
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">Email</label>
+          <input id="email" name="email" type="email" required autoComplete="email" className={inputClass} placeholder="you@example.com" />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm text-faint mb-1">Message</label>
-          <textarea
-            id="message"
-            name="message"
-            required
-            rows={4}
-            className="w-full rounded-lg bg-surface-alt border border-line px-4 py-2.5 text-body placeholder:text-faint focus:outline-none focus:border-cyan-400 transition-colors resize-none"
-            placeholder="How can I help?"
-          />
+          <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink">Message</label>
+          <textarea id="message" name="message" required rows={5} className={`${inputClass} resize-none`} placeholder="What would you like to talk about?" />
         </div>
 
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium hover:scale-105 transition-transform shadow-lg shadow-cyan-500/20 disabled:opacity-60 disabled:hover:scale-100"
-        >
-          <FaPaperPlane className="text-sm" />
-          {status === "submitting" ? "Sending..." : "Send Message"}
+        <button type="submit" disabled={status === "submitting"} className="btn-primary justify-center disabled:opacity-60">
+          <FaPaperPlane className="text-xs" />
+          {status === "submitting" ? "Sending..." : "Send message"}
         </button>
 
-        {status === "success" && (
-          <p className="text-sm text-green-400">Thanks for reaching out &mdash; I&apos;ll get back to you soon.</p>
-        )}
-        {status === "error" && (
-          <p className="text-sm text-red-400">Something went wrong - please try emailing me directly instead.</p>
-        )}
-        {status === "unconfigured" && (
-          <p className="text-sm text-faint">This form isn&apos;t connected yet &mdash; please email me directly at <a href={`mailto:${CONTACT.email}`} className="text-cyan-400 hover:underline">{CONTACT.email}</a>.</p>
-        )}
-      </motion.form>
+        <div aria-live="polite">
+          {status === "success" && (
+            <p className="text-sm text-accent">Message sent. I&apos;ll reply by email soon.</p>
+          )}
+          {status === "error" && (
+            <p className="text-sm text-red-700">The message didn&apos;t send. Email me directly at <a href={`mailto:${CONTACT.email}`} className="underline">{CONTACT.email}</a>.</p>
+          )}
+          {status === "unconfigured" && (
+            <p className="text-sm text-faint">This form isn&apos;t connected yet. Email me directly at <a href={`mailto:${CONTACT.email}`} className="text-accent underline">{CONTACT.email}</a>.</p>
+          )}
+        </div>
+      </form>
     </div>
-   </div>
+   </section>
   )
 }
 

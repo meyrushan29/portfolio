@@ -1,93 +1,76 @@
-import { HERO_CONTENT } from "../constants";
+import { HERO_CONTENT, HERO_ROLE } from "../constants";
 import ProfilePic from '../assets/Profile.jpg';
 import { motion } from 'framer-motion';
 
-const container = (delay) => ({
-  hidden: { x: -100, opacity: 0 },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: { duration: 0.5, delay: delay },
-  }
-})
+const ease = [0.22, 1, 0.36, 1];
+
+const rise = (delay) => ({
+  initial: { y: 24, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  transition: { duration: 0.7, delay, ease },
+});
+
+// Rounded-square portrait with a cobalt frame that slides out from behind on load.
+const Portrait = () => (
+  <motion.div
+    {...rise(0.2)}
+    className="relative mx-auto w-full max-w-[24rem] pb-4 pr-4 lg:ml-auto lg:mr-0"
+  >
+    <motion.div
+      aria-hidden="true"
+      initial={{ x: -16, y: -16, opacity: 0 }}
+      animate={{ x: 0, y: 0, opacity: 1 }}
+      transition={{ duration: 0.9, delay: 0.7, ease }}
+      className="absolute bottom-0 right-0 left-4 top-4 rounded-[2rem] bg-accent"
+    />
+    <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line bg-surface-alt">
+      <img
+        src={ProfilePic}
+        alt="Meyrushan Nadarajan"
+        className="h-full w-full object-cover object-[50%_30%]"
+      />
+    </div>
+  </motion.div>
+);
 
 const Hero = () => {
   return (
-    <div className="border-b border-line pb-24 pt-32 lg:mb-35">
-      <div className="flex flex-wrap items-center">
-        <div className="w-full lg:w-1/2">
-          <div className="flex flex-col items-center lg:items-start">
-            <motion.h1
-              variants={container(0)}
-              initial="hidden"
-              animate="visible"
-              className="w-full pb-4 text-5xl font-thin tracking-tight text-ink lg:mt-16 lg:text-7xl"
-            >
-              Meyrushan Nadarajan
-            </motion.h1>
+    <section className="grid items-center gap-14 pb-24 pt-28 sm:pt-32 lg:grid-cols-12 lg:gap-8 lg:pb-32 lg:pt-40">
+      <div className="lg:col-span-7">
+        <motion.a
+          {...rise(0)}
+          href="#research"
+          className="group inline-flex max-w-full items-center gap-3 rounded-full border border-accent/30 bg-accent-soft py-1.5 pl-1.5 pr-4 text-sm text-ink"
+        >
+          <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-white">New</span>
+          <span className="truncate">CISCON 2026 paper published in IEEE Xplore</span>
+        </motion.a>
 
-            <motion.span
-              variants={container(0.5)}
-              initial="hidden"
-              animate="visible"
-              className="w-full bg-gradient-to-r from-cyan-300 to-purple-400 bg-clip-text text-xl sm:text-2xl tracking-tight text-transparent font-medium text-center lg:text-left"
-            >
-              Software Engineer | Full-Stack Developer | AI &amp; Mobile Technology
-            </motion.span>
+        <motion.h1
+          {...rise(0.1)}
+          className="mt-8 font-display text-[clamp(3.25rem,11vw,7.5rem)] font-semibold leading-[0.88] tracking-[-0.045em] text-ink"
+        >
+          Meyrushan<br />Nadarajan
+        </motion.h1>
 
-            <motion.p
-              variants={container(1)}
-              initial="hidden"
-              animate="visible"
-              className="w-full my-2 max-w-xl py-6 font-light leading-relaxed tracking-wide text-faint text-center lg:text-left"
-            >
-              {HERO_CONTENT}
-            </motion.p>
+        <motion.p {...rise(0.25)} className="mt-8 max-w-xl font-display text-2xl leading-snug tracking-tight text-ink sm:text-[1.7rem]">
+          {HERO_ROLE}
+        </motion.p>
 
-            <motion.div
-                variants={container(1.5)}
-                initial="hidden"
-                animate="visible"
-                className="w-full flex flex-wrap justify-center lg:justify-start gap-4 mt-4"
-            >
-                <a
-                  href="#projects"
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-300 to-purple-500 text-neutral-950 font-semibold hover:scale-105 transition-transform shadow-lg shadow-cyan-500/20"
-                >
-                  View Projects
-                </a>
-                <a
-                  href="/resume/Meyrushan_Nadarajan_CV.pdf"
-                  download="Meyrushan_Nadarajan_CV.pdf"
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium hover:scale-105 transition-transform shadow-lg shadow-cyan-500/20"
-                >
-                  Download CV
-                </a>
-                 <a
-                  href="#contact"
-                  className="px-6 py-3 rounded-full border border-line-strong text-body font-medium hover:bg-surface-alt transition-colors"
-                >
-                  Contact Me
-                </a>
-            </motion.div>
-          </div>
-        </div>
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-12 lg:mt-0">
-           <div className="relative">
-              {/* Glow effect behind image */}
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-500 blur-3xl opacity-20 rounded-full animate-pulse"></div>
-              <motion.img
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
-                src={ProfilePic}
-                alt="Meyrushan Nadarajan"
-                className="relative z-10 w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[30rem] lg:h-[30rem] object-cover rounded-2xl shadow-2xl border border-line"
-              />
-           </div>
-        </div>
+        <motion.p {...rise(0.35)} className="mt-5 max-w-xl text-base leading-relaxed text-faint sm:text-lg">
+          {HERO_CONTENT}
+        </motion.p>
+
+        <motion.div {...rise(0.45)} className="mt-10 flex flex-wrap gap-3">
+          <a href="#projects" className="btn-primary">See projects</a>
+          <a href="/resume/Meyrushan_Nadarajan_CV.pdf" download="Meyrushan_Nadarajan_CV.pdf" className="btn-secondary">Download CV</a>
+        </motion.div>
       </div>
-    </div>
+
+      <div className="lg:col-span-5">
+        <Portrait />
+      </div>
+    </section>
   );
 };
 

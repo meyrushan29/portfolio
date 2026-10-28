@@ -1,120 +1,97 @@
 import { PROJECTS } from "../constants";
-import { motion } from "framer-motion";
-import { FaGithub, FaLink, FaCheckCircle, FaStar } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaCheck } from "react-icons/fa";
+import SectionHeading from "./SectionHeading";
+
+const TechTags = ({ technologies }) => (
+  <ul className="flex flex-wrap gap-2">
+    {technologies.map((tech) => (
+      <li key={tech} className="tag">{tech}</li>
+    ))}
+  </ul>
+);
 
 const ProjectLinks = ({ project }) => {
-  if (!project.github && !project.demo) return null;
+  const links = [
+    project.paper && { href: project.paper, label: "Read the paper", Icon: FaExternalLinkAlt },
+    project.github && { href: project.github, label: "Source code", Icon: FaGithub },
+    project.demo && { href: project.demo, label: "Live demo", Icon: FaExternalLinkAlt },
+  ].filter(Boolean);
+  if (links.length === 0) return null;
+
   return (
-    <div className="absolute inset-0 bg-bg/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-      {project.github && (
-        <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} GitHub repository`} className="p-2 bg-neutral-100 rounded-full text-neutral-900 hover:bg-cyan-300 transition-colors"><FaGithub /></a>
-      )}
-      {project.demo && (
-        <a href={project.demo} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo`} className="p-2 bg-neutral-100 rounded-full text-neutral-900 hover:bg-cyan-300 transition-colors"><FaLink /></a>
-      )}
+    <div className="flex flex-wrap gap-x-6 gap-y-2">
+      {links.map(({ href, label, Icon }) => (
+        <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-accent underline decoration-accent/30 underline-offset-4 hover:decoration-accent">
+          {label} <Icon className="text-xs" />
+        </a>
+      ))}
     </div>
   );
 };
 
-const TechTags = ({ technologies, large }) => (
-  <div className="flex flex-wrap gap-2">
-    {technologies.map((tech) => (
-      <span
-        key={tech}
-        className={`rounded bg-surface-alt px-2 py-1 font-medium text-cyan-400 border border-line ${large ? "text-xs sm:text-sm" : "text-xs"}`}
-      >
-        {tech}
-      </span>
-    ))}
-  </div>
-);
-
 const FeaturedProject = ({ project }) => (
-  <motion.div
-    whileInView={{ opacity: 1, y: 0 }}
-    initial={{ opacity: 0, y: 50 }}
-    transition={{ duration: 0.6 }}
-    className="glass-card p-6 sm:p-8 mb-10 group"
-  >
-    <div className="flex items-center gap-2 mb-6">
-      <FaStar className="text-cyan-400" />
-      <span className="text-xs font-semibold uppercase tracking-widest text-cyan-400">Featured Project</span>
-    </div>
-    <div className="flex flex-col lg:flex-row gap-8">
-      <div className="relative overflow-hidden rounded-lg lg:w-2/5 h-[420px] sm:h-[480px] flex-shrink-0 flex items-center justify-center bg-surface-alt">
-        {project.video ? (
-          <video
-            src={project.video}
-            poster={project.image}
-            controls
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <img
-            src={project.image}
-            alt={project.title}
-            loading="lazy"
-            className="h-full w-full object-contain"
-          />
-        )}
-        {!project.video && <ProjectLinks project={project} />}
-      </div>
-      <div className="lg:w-3/5 flex flex-col">
-        <h3 className="mb-1 text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-300 to-purple-400 bg-clip-text text-transparent">{project.title}</h3>
-        {project.subtitle && <p className="mb-3 text-sm text-purple-400 font-medium">{project.subtitle}</p>}
-        <p className="mb-4 text-faint text-sm leading-relaxed">{project.description}</p>
-        {project.features?.length > 0 && (
-          <ul className="mb-4 flex flex-col gap-2">
-            {project.features.map((feature) => (
-              <li key={feature} className="flex items-start gap-2 text-sm text-body">
-                <FaCheckCircle className="text-cyan-400 mt-1 flex-shrink-0" />
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className="mt-auto pt-2">
-          <TechTags technologies={project.technologies} large />
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
-
-const ProjectCard = ({ project, index }) => (
-  <motion.div
-    whileInView={{ opacity: 1, y: 0 }}
-    initial={{ opacity: 0, y: 50 }}
-    transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="glass-card p-6 hover:shadow-cyan-500/10 transition-shadow group relative overflow-hidden flex flex-col"
-  >
-    <div className="relative overflow-hidden rounded-lg mb-4 h-48">
-      {project.image ? (
-        <img
-          src={project.image}
-          alt={project.title}
-          loading="lazy"
-          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+  <article className="grid gap-10 rounded-[2rem] border border-line bg-surface p-5 sm:p-8 lg:grid-cols-12 lg:gap-12 lg:p-10">
+    <div className="flex items-center justify-center overflow-hidden rounded-[1.5rem] bg-surface-alt lg:col-span-5">
+      {project.video ? (
+        <video
+          src={project.video}
+          poster={project.image}
+          controls
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="max-h-[560px] w-full object-contain"
         />
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface-alt to-surface text-center px-4">
-          <span className="text-lg font-semibold text-faint">{project.title}</span>
-        </div>
+        <img src={project.image} alt={project.title} loading="lazy" className="max-h-[560px] w-full object-contain" />
       )}
-      <ProjectLinks project={project} />
     </div>
 
-    <h3 className="mb-1 text-xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">{project.title}</h3>
-    {project.subtitle && <p className="mb-2 text-xs text-purple-400 font-medium">{project.subtitle}</p>}
-    <p className="mb-4 text-faint text-sm line-clamp-3">{project.description}</p>
-    <div className="mt-auto">
-      <TechTags technologies={project.technologies} />
+    <div className="flex flex-col lg:col-span-7">
+      <p className="text-sm font-medium text-accent">Featured research project</p>
+      <h3 className="mt-2 font-display text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">{project.title}</h3>
+      {project.subtitle && <p className="mt-2 text-lg text-body">{project.subtitle}</p>}
+      <p className="mt-5 leading-relaxed text-faint">{project.description}</p>
+      {project.features?.length > 0 && (
+        <ul className="mt-6 flex flex-col gap-3">
+          {project.features.map((feature) => (
+            <li key={feature} className="flex items-start gap-3 text-sm text-body">
+              <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-accent-soft text-[10px] text-accent">
+                <FaCheck />
+              </span>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="mt-8 flex flex-col gap-5 lg:mt-auto lg:pt-8">
+        <ProjectLinks project={project} />
+        <TechTags technologies={project.technologies} />
+      </div>
     </div>
-  </motion.div>
+  </article>
+);
+
+const ProjectRow = ({ project }) => (
+  <article className="grid gap-6 border-t border-line py-12 md:grid-cols-12 md:gap-10">
+    <div className="overflow-hidden rounded-[1.25rem] border border-line bg-surface-alt md:col-span-5">
+      {project.image ? (
+        <img src={project.image} alt={`${project.title} screenshot`} loading="lazy" className="aspect-[16/10] w-full object-cover object-top" />
+      ) : (
+        <div className="flex aspect-[16/10] items-center justify-center p-6 text-center font-display text-xl text-faint">{project.title}</div>
+      )}
+    </div>
+    <div className="md:col-span-7">
+      <h3 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{project.title}</h3>
+      {project.subtitle && <p className="mt-1 text-base text-accent">{project.subtitle}</p>}
+      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-body sm:text-base">{project.description}</p>
+      <div className="mt-6 flex flex-col gap-4">
+        <ProjectLinks project={project} />
+        <TechTags technologies={project.technologies} />
+      </div>
+    </div>
+  </article>
 );
 
 const Project = () => {
@@ -122,26 +99,18 @@ const Project = () => {
   const rest = PROJECTS.filter((p) => !p.featured);
 
   return (
-    <div id="projects" className="border-b border-line pb-24">
-      <motion.h2
-        whileInView={{opacity:1 ,y:0}}
-        initial={{opacity:0,y:-100}}
-        transition={{duration:0.5}}
-        className="my-20 text-center text-4xl font-light text-ink"
-      >
-        Projects
-      </motion.h2>
-
-      <div className="px-4 lg:px-20">
-        {featured && <FeaturedProject project={featured} />}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {rest.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
-          ))}
-        </div>
+    <section id="projects" className="border-t border-line py-24 lg:py-32">
+      <SectionHeading
+        title="Projects"
+        intro="Production systems and research builds, from real-time quiz engines to role-scoped business platforms."
+      />
+      {featured && <FeaturedProject project={featured} />}
+      <div className="mt-16">
+        {rest.map((project) => (
+          <ProjectRow key={project.title} project={project} />
+        ))}
       </div>
-    </div>
+    </section>
   );
 };
 

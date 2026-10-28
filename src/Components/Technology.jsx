@@ -7,137 +7,150 @@ import {
 } from "react-icons/si";
 import { FaNodeJs, FaJava, FaAws, FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
-
-const iconVariants = (duration) => ({
-  initial: { y: -10 },
-  animate: {
-    y: [10, -10],
-    transition: {
-      duration: duration,
-      ease: "linear",
-      repeat: Infinity,
-      repeatType: "reverse",
-    },
-  },
-});
-
-const TechItem = ({ Icon, color, duration, name }) => (
-  <motion.div
-    variants={iconVariants(duration)}
-    initial="initial"
-    animate="animate"
-    className="rounded-2xl border-2 border-line p-4 transition-colors hover:border-cyan-400 bg-surface shadow-sm"
-    title={name}
-  >
-    <Icon className={`text-5xl sm:text-6xl ${color}`} />
-  </motion.div>
-);
+import SectionHeading from "./SectionHeading";
 
 const SKILL_CATEGORIES = [
   {
     name: "Frontend",
     items: [
-      { Icon: RiReactjsLine, color: "text-cyan-400", duration: 2, name: "React" },
-      { Icon: TbBrandNextjs, color: "text-body", duration: 5, name: "Next.js" },
-      { Icon: SiTypescript, color: "text-blue-400", duration: 4.5, name: "TypeScript" },
-      { Icon: SiJavascript, color: "text-yellow-400", duration: 6, name: "JavaScript" },
-      { Icon: SiHtml5, color: "text-orange-500", duration: 3, name: "HTML5" },
-      { Icon: SiCss3, color: "text-blue-500", duration: 4, name: "CSS3" },
-      { Icon: SiTailwindcss, color: "text-cyan-400", duration: 3.5, name: "Tailwind CSS" },
+      { Icon: RiReactjsLine, name: "React" },
+      { Icon: TbBrandNextjs, name: "Next.js" },
+      { Icon: SiTypescript, name: "TypeScript" },
+      { Icon: SiJavascript, name: "JavaScript" },
+      { Icon: SiHtml5, name: "HTML5" },
+      { Icon: SiCss3, name: "CSS3" },
+      { Icon: SiTailwindcss, name: "Tailwind CSS" },
     ],
   },
   {
     name: "Backend",
     items: [
-      { Icon: FaNodeJs, color: "text-green-500", duration: 4, name: "Node.js" },
-      { Icon: SiExpress, color: "text-neutral-700", duration: 3, name: "Express.js" },
-      { Icon: SiFastapi, color: "text-teal-400", duration: 3.5, name: "FastAPI" },
-      { Icon: SiSpringboot, color: "text-green-600", duration: 3, name: "Spring Boot" },
-      { Icon: FaJava, color: "text-orange-500", duration: 5, name: "Java" },
-    ],
-  },
-  {
-    name: "Mobile",
-    items: [
-      { Icon: SiFlutter, color: "text-sky-400", duration: 4, name: "Flutter" },
-      { Icon: SiDart, color: "text-blue-400", duration: 3, name: "Dart" },
-    ],
-  },
-  {
-    name: "Database",
-    items: [
-      { Icon: SiMongodb, color: "text-green-500", duration: 6, name: "MongoDB" },
-      { Icon: SiMysql, color: "text-blue-500", duration: 4, name: "MySQL" },
-      { Icon: SiPostgresql, color: "text-blue-400", duration: 3, name: "PostgreSQL" },
+      { Icon: FaNodeJs, name: "Node.js" },
+      { Icon: SiExpress, name: "Express.js" },
+      { Icon: SiFastapi, name: "FastAPI" },
+      { Icon: SiSpringboot, name: "Spring Boot" },
+      { Icon: FaJava, name: "Java" },
     ],
   },
   {
     name: "AI / ML",
     items: [
-      { Icon: SiPython, color: "text-yellow-300", duration: 5.5, name: "Python" },
-      { Icon: SiPytorch, color: "text-orange-400", duration: 4, name: "PyTorch" },
+      { Icon: SiPython, name: "Python" },
+      { Icon: SiPytorch, name: "PyTorch" },
+      { name: "XGBoost" },
+      { name: "MobileNetV2" },
+      { name: "SHAP" },
+      { name: "Grad-CAM" },
     ],
-    tags: ["XGBoost", "MobileNetV2", "SHAP", "Grad-CAM"],
+  },
+  {
+    name: "Mobile",
+    items: [
+      { Icon: SiFlutter, name: "Flutter" },
+      { Icon: SiDart, name: "Dart" },
+    ],
+  },
+  {
+    name: "Databases",
+    items: [
+      { Icon: SiMongodb, name: "MongoDB" },
+      { Icon: SiMysql, name: "MySQL" },
+      { Icon: SiPostgresql, name: "PostgreSQL" },
+    ],
   },
   {
     name: "Tools",
     items: [
-      { Icon: SiGit, color: "text-orange-500", duration: 3, name: "Git" },
-      { Icon: FaGithub, color: "text-body", duration: 4, name: "GitHub" },
-      { Icon: SiDocker, color: "text-blue-600", duration: 2.5, name: "Docker" },
-      { Icon: FaAws, color: "text-orange-400", duration: 3.5, name: "AWS" },
-      { Icon: SiSwagger, color: "text-green-500", duration: 4.5, name: "Swagger" },
-      { Icon: SiJsonwebtokens, color: "text-pink-400", duration: 3, name: "JWT" },
+      { Icon: SiGit, name: "Git" },
+      { Icon: FaGithub, name: "GitHub" },
+      { Icon: SiDocker, name: "Docker" },
+      { Icon: FaAws, name: "AWS" },
+      { Icon: SiSwagger, name: "Swagger" },
+      { Icon: SiJsonwebtokens, name: "JWT" },
     ],
   },
 ];
 
+const ICON_SKILLS = SKILL_CATEGORIES.flatMap((c) => c.items).filter((item) => item.Icon);
+
+const groupVariants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1], staggerChildren: 0.05, delayChildren: i * 0.12 + 0.2 },
+  }),
+};
+
+const pillVariants = {
+  hidden: { opacity: 0, scale: 0.6, y: 12 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 380, damping: 22 } },
+};
+
+// Continuous strip of every skill icon; the list is doubled so the loop is seamless.
+const Marquee = () => (
+  <div
+    aria-hidden="true"
+    className="group relative mb-16 overflow-hidden border-y border-line py-6 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+  >
+    <div className="flex w-max animate-marquee gap-12 group-hover:[animation-play-state:paused]">
+      {[...ICON_SKILLS, ...ICON_SKILLS].map(({ Icon, name }, i) => (
+        <span key={`${name}-${i}`} className="flex items-center gap-3 whitespace-nowrap font-display text-2xl font-medium text-ink/80">
+          <Icon className="text-3xl text-accent" />
+          {name}
+        </span>
+      ))}
+    </div>
+  </div>
+);
+
 const Technology = () => {
   return (
-    <div id="technologies" className="border-b border-line pb-24">
-      <motion.h2
-       whileInView={{opacity:1 ,y:0}}
-       initial={{opacity:0,y:-100}}
-       transition={{duration:1}}
-       className="my-20 text-center text-4xl font-light text-ink">Skills</motion.h2>
-
-      <div className="flex flex-col gap-12 max-w-5xl mx-auto">
-        {SKILL_CATEGORIES.map((category) => (
-          <div key={category.name}>
-            <motion.h3
-              whileInView={{opacity:1 ,x:0}}
-              initial={{opacity:0,x:-40}}
-              transition={{duration:0.6}}
-              className="text-sm font-semibold uppercase tracking-widest text-cyan-400 mb-5 text-center sm:text-left"
-            >
+    <section id="skills" className="border-t border-line py-24 lg:py-32">
+      <SectionHeading title="Skills" intro="The tools I reach for across the stack, grouped by where they sit." />
+      <Marquee />
+      <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {SKILL_CATEGORIES.map((category, i) => (
+          <motion.div
+            key={category.name}
+            custom={i % 3}
+            variants={groupVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <h3 className="relative pb-3 font-display text-xl font-semibold text-ink">
               {category.name}
-            </motion.h3>
-            <motion.div
-             whileInView={{opacity:1 ,x:0}}
-             initial={{opacity:0,x:-100}}
-             transition={{duration:1}}
-             className="flex flex-wrap items-center justify-center sm:justify-start gap-6"
-            >
-              {category.items.map((item) => (
-                <TechItem key={item.name} {...item} />
+              <span className="absolute inset-x-0 bottom-0 h-px bg-line" />
+              <motion.span
+                variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { duration: 0.8, ease: "easeOut" } } }}
+                className="absolute bottom-0 left-0 h-0.5 w-16 origin-left bg-accent"
+              />
+            </h3>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {category.items.map(({ Icon, name }) => (
+                <motion.li
+                  key={name}
+                  variants={pillVariants}
+                  whileHover="hover"
+                  className="group/pill inline-flex cursor-default items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-2 text-sm text-ink transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent hover:shadow-[0_8px_20px_-8px_rgb(var(--accent)/0.45)]"
+                >
+                  {Icon && (
+                    <motion.span
+                      variants={{ hover: { rotate: 360, scale: 1.25, transition: { duration: 0.5 } } }}
+                      className="inline-flex"
+                    >
+                      <Icon aria-hidden="true" className="text-base text-accent" />
+                    </motion.span>
+                  )}
+                  {name}
+                </motion.li>
               ))}
-            </motion.div>
-            {category.tags && (
-              <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-5">
-                {category.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-surface-alt border border-line px-3 py-1.5 text-xs font-medium text-faint"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+            </ul>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

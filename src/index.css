@@ -1,46 +1,64 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: "Outfit", sans-serif;
   color-scheme: light;
 
-  --bg: 244 245 248;
-  --surface: 255 255 255;
-  --surface-alt: 236 238 242;
-  --line: 203 209 217;
-  --line-strong: 156 163 175;
-  --ink: 17 24 39;
-  --body: 55 65 81;
-  --faint: 100 108 120;
+  --bg: 255 255 255;
+  --surface: 247 248 251;
+  --surface-alt: 238 241 247;
+  --line: 222 227 236;
+  --line-strong: 160 170 188;
+  --ink: 15 23 42;
+  --body: 51 65 85;
+  --faint: 90 102 122;
+  --accent: 37 71 208;
+  --accent-soft: 232 237 255;
 }
 
 @layer base {
-  body {
-    @apply bg-bg text-body antialiased selection:bg-cyan-500/30 selection:text-cyan-900;
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
   }
 
-  /* Custom Scrollbar */
+  body {
+    @apply bg-bg font-sans text-body antialiased selection:bg-accent/20 selection:text-ink;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-4 outline-accent rounded-md;
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-surface;
+    @apply bg-bg;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-surface-alt rounded-full hover:bg-line-strong transition-colors;
+    @apply bg-line-strong/60 rounded-full;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .animate-marquee {
+      animation: none;
+    }
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-surface/90 backdrop-blur-xl border border-line rounded-2xl shadow-lg;
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink;
   }
-  .gradient-text {
-    @apply bg-gradient-to-r from-cyan-300 via-slate-500 to-purple-500 bg-clip-text text-transparent;
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-full border border-ink/20 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-ink hover:bg-surface;
+  }
+  .tag {
+    @apply rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-body;
   }
 }
