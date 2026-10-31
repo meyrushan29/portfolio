@@ -52,7 +52,7 @@ export const PUBLICATIONS = [
 
 export const EXPERIENCES = [
   {
-    year: "Oct 2024 - Oct 2025",
+    year: "Oct 2024 - Apr 2026",
     role: "Associate Software Engineer",
     company: "D-Gateway Innovations (Pvt) Ltd",
     description: `Developed and maintained full-stack web applications using React, Node.js and MongoDB, delivering features across frontend and backend modules. Built and extended RESTful APIs and optimized database queries to improve application performance and data reliability. Worked in Agile/Scrum teams and participated in code reviews, contributing to code quality and maintainability standards.`,
