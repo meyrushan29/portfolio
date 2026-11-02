@@ -139,7 +139,7 @@ export const CONTACT = {
   address: "Colombo, Sri Lanka",
   phoneNo: "+94 77 630 9171",
   email: "meyrushan29@gmail.com",
-  linkedin: "https://www.linkedin.com/in/meyrushan-nadarajan",
+  linkedin: "https://www.linkedin.com/in/meyrushan",
   github: "https://github.com/meyrushan29",
   portfolio: "https://react-portfolio-meyrushan.vercel.app/",
   // Formspree form endpoint, e.g. "https://formspree.io/f/xxxxaaaa" - leave empty until you have one.
