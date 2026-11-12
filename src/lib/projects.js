@@ -6,24 +6,39 @@ import { PROJECTS } from "../constants";
 const isConfigured = !!(import.meta.env.VITE_SUPABASE_URL?.trim() && import.meta.env.VITE_SUPABASE_ANON_KEY?.trim());
 const loadSupabase = () => import("./supabase");
 
+// Only http(s) URLs are allowed into href/src attributes. Anything else
+// (javascript:, data:, a stray string) is dropped.
+export const safeUrl = (value) => {
+  if (typeof value !== "string" || value === "") return "";
+  try {
+    const url = new URL(value, window.location.origin);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
+};
+
+const text = (value) => (typeof value === "string" ? value : "");
+const list = (value) => (Array.isArray(value) ? value.filter((v) => typeof v === "string") : []);
+
 export const fromRow = (row) => ({
   id: row.id,
-  title: row.title,
-  subtitle: row.subtitle || "",
-  description: row.description || "",
-  problem: row.problem || "",
-  role: row.role || "",
-  facts: row.facts || [],
-  outcome: row.outcome || "",
-  features: row.features || [],
-  technologies: row.technologies || [],
-  image: row.image_url || "",
-  gallery: row.gallery_urls || [],
-  video: row.video_url || "",
-  github: row.github || "",
-  demo: row.demo || "",
-  paper: row.paper || "",
-  featured: row.featured,
+  title: text(row.title),
+  subtitle: text(row.subtitle),
+  description: text(row.description),
+  problem: text(row.problem),
+  role: text(row.role),
+  facts: list(row.facts),
+  outcome: text(row.outcome),
+  features: list(row.features),
+  technologies: list(row.technologies),
+  image: safeUrl(row.image_url),
+  gallery: list(row.gallery_urls).map(safeUrl).filter(Boolean),
+  video: safeUrl(row.video_url),
+  github: safeUrl(row.github),
+  demo: safeUrl(row.demo),
+  paper: safeUrl(row.paper),
+  featured: !!row.featured,
   sortOrder: row.sort_order,
 });
 
