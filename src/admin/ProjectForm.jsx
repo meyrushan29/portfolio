@@ -2,8 +2,8 @@ import { useState } from "react";
 import { uploadMedia } from "../lib/projects";
 
 const empty = {
-  title: "", subtitle: "", description: "", features: [], technologies: [],
-  image: "", video: "", github: "", demo: "", paper: "", featured: false,
+  title: "", subtitle: "", problem: "", outcome: "", description: "", features: [], technologies: [],
+  image: "", gallery: [], video: "", github: "", demo: "", paper: "", featured: false,
 };
 
 const Field = ({ label, htmlFor, hint, children }) => (
@@ -52,6 +52,68 @@ const MediaField = ({ id, label, accept, value, onChange, kind }) => {
   );
 };
 
+// Several screenshots at once; shown in a lightbox on the public site.
+const GalleryField = ({ id, value, onChange }) => {
+  const [uploading, setUploading] = useState(0);
+  const [error, setError] = useState("");
+
+  const upload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setError("");
+    setUploading(files.length);
+    const urls = [];
+    try {
+      for (const file of files) {
+        urls.push(await uploadMedia(file));
+        setUploading((n) => n - 1);
+      }
+    } catch (err) {
+      setError(`Upload failed: ${err.message}`);
+    } finally {
+      if (urls.length > 0) onChange([...value, ...urls]);
+      setUploading(0);
+      e.target.value = "";
+    }
+  };
+
+  const move = (from, to) => {
+    if (to < 0 || to >= value.length) return;
+    const next = [...value];
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item);
+    onChange(next);
+  };
+
+  return (
+    <Field label="Gallery screenshots (optional)" htmlFor={id} hint="Pick several files at once. Visitors can browse them full-screen from the project.">
+      <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-4">
+        {value.length > 0 && (
+          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {value.map((url, i) => (
+              <li key={url} className="flex flex-col gap-1">
+                <img src={url} alt="" className="aspect-[16/10] w-full rounded-lg border border-line bg-surface-alt object-cover object-top" />
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex gap-1">
+                    <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} aria-label="Move earlier" className="px-1 text-body disabled:opacity-30">&larr;</button>
+                    <button type="button" onClick={() => move(i, i + 1)} disabled={i === value.length - 1} aria-label="Move later" className="px-1 text-body disabled:opacity-30">&rarr;</button>
+                  </span>
+                  <button type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} className="font-medium text-red-700 hover:underline">Remove</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="flex flex-wrap items-center gap-3">
+          <input id={id} type="file" accept="image/*" multiple onChange={upload} disabled={uploading > 0} className="text-sm text-body file:mr-3 file:rounded-full file:border-0 file:bg-accent-soft file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent" />
+          {uploading > 0 && <span className="text-sm text-faint">Uploading {uploading} left...</span>}
+        </div>
+        {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+      </div>
+    </Field>
+  );
+};
+
 const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
   const [form, setForm] = useState(() => ({ ...empty, ...initial }));
   const [featuresText, setFeaturesText] = useState((initial?.features || []).join("\n"));
@@ -86,6 +148,14 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
         <Field label="Subtitle" htmlFor="p-subtitle">
           <input id="p-subtitle" value={form.subtitle} onChange={set("subtitle")} className="admin-input" />
         </Field>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Field label="The problem" htmlFor="p-problem" hint="One sentence: what was broken or missing before.">
+            <textarea id="p-problem" rows={3} value={form.problem} onChange={set("problem")} className="admin-input resize-y" />
+          </Field>
+          <Field label="The outcome" htmlFor="p-outcome" hint="One sentence: what exists now because of the project.">
+            <textarea id="p-outcome" rows={3} value={form.outcome} onChange={set("outcome")} className="admin-input resize-y" />
+          </Field>
+        </div>
         <Field label="Description" htmlFor="p-description">
           <textarea id="p-description" rows={5} value={form.description} onChange={set("description")} className="admin-input resize-y" />
         </Field>
@@ -97,6 +167,7 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
         </Field>
 
         <MediaField id="p-image" label="Screenshot" accept="image/*" kind="image" value={form.image} onChange={(url) => setForm((f) => ({ ...f, image: url }))} />
+        <GalleryField id="p-gallery" value={form.gallery} onChange={(gallery) => setForm((f) => ({ ...f, gallery }))} />
         <MediaField id="p-video" label="Demo video (optional)" accept="video/*" kind="video" value={form.video} onChange={(url) => setForm((f) => ({ ...f, video: url }))} />
 
         <div className="grid gap-6 sm:grid-cols-3">
@@ -112,7 +183,7 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
         </div>
 
         <label className="flex items-start gap-3 text-sm text-ink">
-          <input type="checkbox" checked={form.featured} onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))} className="mt-0.5 h-4 w-4 accent-[rgb(var(--accent))]" />
+          <input type="checkbox" checked={form.featured} onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))} className="mt-0.5 h-4 w-4 accent-accent" />
           <span>
             <span className="font-medium">Featured project</span>
             <span className="block text-faint">Shown large at the top of Projects. Only one project can be featured.</span>

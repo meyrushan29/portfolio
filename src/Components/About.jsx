@@ -1,41 +1,22 @@
-import aboutImg from '../assets/about.jpg';
-import { ABOUT_TEXT, EDUCATION } from '../constants';
-import SectionHeading from './SectionHeading';
+import portrait from "../assets/Profile.webp";
+import { ABOUT_TEXT } from "../constants";
+import SectionHeading from "./SectionHeading";
 
-const About = () => {
-  return (
-    <section id="about" className="border-t border-line py-24 lg:py-32">
-      <SectionHeading title="About" />
-      <div className="grid gap-12 lg:grid-cols-12">
-        <div className="lg:col-span-5">
-          <img
-            className="aspect-[4/5] w-full rounded-[2rem] border border-line object-cover"
-            src={aboutImg}
-            alt="Meyrushan Nadarajan at work"
-            loading="lazy"
-          />
-        </div>
-
-        <div className="lg:col-span-7">
-          <p className="max-w-2xl text-lg leading-[1.75] text-body">{ABOUT_TEXT}</p>
-
-          <h3 className="mt-14 font-display text-2xl font-semibold tracking-tight text-ink">Education</h3>
-          <dl className="mt-4">
-            {EDUCATION.map((edu) => (
-              <div key={edu.title} className="grid gap-1 border-t border-line py-5 sm:grid-cols-[8rem_1fr] sm:gap-6">
-                <dt className="text-sm tabular-nums text-faint">{edu.year}</dt>
-                <dd>
-                  <p className="font-semibold text-ink">{edu.title}</p>
-                  <p className="text-sm text-body">{edu.institution}</p>
-                  {edu.description && <p className="mt-2 text-sm leading-relaxed text-faint">{edu.description}</p>}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </div>
-    </section>
-  );
-};
+const About = () => (
+  <section id="about" className="case-grid border-t border-line py-20 lg:py-28">
+    <SectionHeading title="About" />
+    <div className="case-body flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+      <img
+        className="h-28 w-28 shrink-0 rounded-full border border-line object-cover object-[50%_30%]"
+        src={portrait}
+        alt="Meyrushan Nadarajan"
+        loading="lazy"
+        width="112"
+        height="112"
+      />
+      <p className="max-w-2xl text-lg leading-[1.7] text-body">{ABOUT_TEXT}</p>
+    </div>
+  </section>
+);
 
 export default About;

@@ -1,13 +1,9 @@
+// Title in the left column, intro under it; content sits in the right column
+// via the matching .case-body wrapper.
 const SectionHeading = ({ title, intro }) => (
-  <header className="mb-12 grid gap-4 md:grid-cols-12 md:items-end">
-    <h2 className="font-display text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl md:col-span-6">
-      {title}
-    </h2>
-    {intro && (
-      <p className="max-w-md text-base leading-relaxed text-faint md:col-span-6 md:justify-self-end">
-        {intro}
-      </p>
-    )}
+  <header className="case-title">
+    <h2 className="font-display text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">{title}</h2>
+    {intro && <p className="mt-4 max-w-sm text-base leading-relaxed text-faint">{intro}</p>}
   </header>
 );
 

@@ -1,20 +1,89 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Dark mode is driven by data-theme on <html>, set before paint by the script
+   in index.html. With no attribute the system preference applies. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Six tokens carry the whole design; "water" is reserved for evidence:
+   the research, data, counters and the screenshot viewer. */
 :root {
   color-scheme: light;
+  --paper: #f4f7fa;
+  --surface: #ffffff;
+  --surface-alt: #e9eef4;
+  --line: #d6dee8;
+  --line-strong: #9fb0c4;
+  --ink: #0e1a2b;
+  --body: #3b4a5e;
+  --faint: #64748b;
+  --accent: #2547d0;
+  --accent-soft: #e4eaff;
+  --water: #1e9cbf;
+  --water-soft: #dcf2f8;
+}
 
-  --bg: 255 255 255;
-  --surface: 247 248 251;
-  --surface-alt: 238 241 247;
-  --line: 222 227 236;
-  --line-strong: 160 170 188;
-  --ink: 15 23 42;
-  --body: 51 65 85;
-  --faint: 90 102 122;
-  --accent: 37 71 208;
-  --accent-soft: 232 237 255;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0b1422;
+    --surface: #121d2e;
+    --surface-alt: #1a2739;
+    --line: #243246;
+    --line-strong: #3c4d66;
+    --ink: #eef3f8;
+    --body: #b8c4d4;
+    --faint: #8292a6;
+    --accent: #7b93ff;
+    --accent-soft: #1b2a5a;
+    --water: #4cc3e0;
+    --water-soft: #0f3340;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0b1422;
+  --surface: #121d2e;
+  --surface-alt: #1a2739;
+  --line: #243246;
+  --line-strong: #3c4d66;
+  --ink: #eef3f8;
+  --body: #b8c4d4;
+  --faint: #8292a6;
+  --accent: #7b93ff;
+  --accent-soft: #1b2a5a;
+  --water: #4cc3e0;
+  --water-soft: #0f3340;
+}
+
+@theme inline {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-red-50: #fef2f2;
+  --color-red-200: #fecaca;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+
+  --color-bg: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-water: var(--water);
+  --color-water-soft: var(--water-soft);
+
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -23,12 +92,27 @@
     scroll-padding-top: 5.5rem;
   }
 
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
+
   body {
-    @apply bg-bg font-sans text-body antialiased selection:bg-accent/20 selection:text-ink;
+    @apply bg-bg font-sans text-[17px] leading-[1.6] text-body antialiased selection:bg-accent/20 selection:text-ink;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   :focus-visible {
-    @apply outline outline-2 outline-offset-4 outline-accent rounded-md;
+    @apply rounded-md outline-2 outline-offset-4 outline-accent;
   }
 
   ::-webkit-scrollbar {
@@ -38,30 +122,91 @@
     @apply bg-bg;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-line-strong/60 rounded-full;
+    @apply rounded-full bg-line-strong/60;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
-    .animate-marquee {
-      animation: none;
-    }
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink;
+    @apply inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink dark:text-ink dark:hover:bg-white;
   }
   .btn-secondary {
     @apply inline-flex items-center gap-2 rounded-full border border-ink/20 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-ink hover:bg-surface;
   }
   .admin-input {
-    @apply w-full rounded-xl border border-line bg-bg px-4 py-2.5 text-ink placeholder:text-faint/70 transition-colors focus:border-accent focus:outline-none;
+    @apply w-full rounded-xl border border-line bg-surface px-4 py-2.5 text-ink transition-colors placeholder:text-faint/70 focus:border-accent focus:outline-hidden;
   }
   .tag {
     @apply rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-body;
+  }
+  .text-link {
+    @apply inline-flex items-center gap-2 text-sm font-semibold text-accent underline decoration-accent/30 underline-offset-4 hover:decoration-accent;
+  }
+  /* Section title column + content column; the whole page reads as one case file. */
+  .case-grid {
+    @apply grid gap-8 lg:grid-cols-12 lg:gap-12;
+  }
+  .case-title {
+    @apply lg:col-span-4;
+  }
+  .case-body {
+    @apply lg:col-span-8;
+  }
+}
+
+/* The hero forecast curve draws itself once on load. pathLength="1" on the
+   path makes the dash math unit-free. */
+.forecast-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-path 2.2s var(--ease-out-quint) 0.5s forwards;
+}
+.forecast-fill {
+  opacity: 0;
+  animation: fade-in 0.8s ease 2.2s forwards;
+}
+.forecast-marker {
+  opacity: 0;
+  animation: fade-in 0.5s ease forwards;
+}
+@keyframes draw-path {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+/* Left rail: the track fills as the page scrolls, with no JavaScript when the
+   browser supports scroll-driven animations. */
+.rail-fill {
+  transform-origin: top;
+  transform: scaleY(0);
+}
+@supports (animation-timeline: scroll()) {
+  .rail-fill {
+    animation: rail-grow linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes rail-grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forecast-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .forecast-fill,
+  .forecast-marker {
+    animation: none;
+    opacity: 1;
   }
 }

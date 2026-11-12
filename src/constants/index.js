@@ -1,11 +1,25 @@
-import project2 from "../assets/projects/logistic.png";
-import staffManagementImg from "../assets/Staff_Management/02-dashboard.png";
-import quizzMakerImg from "../assets/QuizzMaker-Screenshots/03-teacher-dashboard.png";
-import hydrationImg from "../assets/Well360_Demo/well360-poster.png";
+import project2 from "../assets/projects/logistic.webp";
+import staffManagementImg from "../assets/Staff_Management/02-dashboard.webp";
+import quizzMakerImg from "../assets/QuizzMaker-Screenshots/03-teacher-dashboard.webp";
+import hydrationImg from "../assets/Well360_Demo/well360-poster.webp";
 import hydrationVideo from "../assets/Well360_Demo/well360-demo.mp4";
-import certificateImg from "../assets/Publication_Certificate.png";
+import certificateImg from "../assets/Publication_Certificate.webp";
 
-export const HERO_ROLE = "Software engineer building full-stack web, mobile and applied-ML products.";
+// Every screenshot in a folder, in filename order, as built URLs.
+const screenshots = (modules) =>
+  Object.entries(modules)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, url]) => url);
+
+const STAFF_MANAGEMENT_GALLERY = screenshots(
+  import.meta.glob("../assets/Staff_Management/*.webp", { eager: true, import: "default" })
+);
+// 01-home is a near-blank loading frame, so it is skipped.
+const QUIZZMAKER_GALLERY = screenshots(
+  import.meta.glob("../assets/QuizzMaker-Screenshots/*.webp", { eager: true, import: "default" })
+).filter((url) => !url.includes("01-home"));
+
+export const HERO_ROLE = "Software engineer building full-stack products and explainable machine learning that runs on phones.";
 
 export const HERO_CONTENT = `B.Sc. (Honours) IT graduate from SLIIT with industry experience shipping scalable, secure web applications. I build interfaces in React, Next.js and Tailwind CSS, and back them with Node.js, Express.js, FastAPI and Spring Boot services.`;
 
@@ -45,6 +59,7 @@ export const PUBLICATIONS = [
         text: "A MobileNetV2 classifier detects dehydration from lip images, with Grad-CAM showing which regions drove the result.",
       },
     ],
+    plain: "Well360 takes your recent water intake, a few body measurements and a photo of your lips, forecasts how much water you will need over the next few hours, and shows which factors drove the answer.",
     certificate: "/publication/CISCON_2026_Certificate.pdf",
     certificateImage: certificateImg,
   },
@@ -74,6 +89,8 @@ export const PROJECTS = [
     featured: true,
     image: hydrationImg,
     video: hydrationVideo,
+    problem: "Hydration advice is generic, but need changes hour by hour and most people cannot tell when they are already dehydrated.",
+    outcome: "Peer-reviewed at CISCON 2026 and published in IEEE Xplore.",
     description: "Final-year research project: a mobile hydration-monitoring app with a user-centred interface, applying machine learning to forecast hydration needs and detect dehydration from lip imagery. Basis of the CISCON 2026 paper on sub-daily hydration forecasting and lip-based dehydration detection, now published in IEEE Xplore.",
     features: [
       "Sub-daily hydration forecasting model",
@@ -91,6 +108,9 @@ export const PROJECTS = [
     title: "Staff Management System",
     subtitle: "Revenue, Target, Attendance and Performance Platform",
     image: staffManagementImg,
+    gallery: STAFF_MANAGEMENT_GALLERY,
+    problem: "A tutoring business tracked revenue, targets, attendance and leave on whiteboards and spreadsheets.",
+    outcome: "One API, an admin console and a field app, with four roles and branch-level data scoping.",
     description: "Three-client full-stack system replacing a manual, whiteboard-based process at a tutoring business: a REST API, a React admin console and a React Native (Expo) mobile app for field staff. Server-side RBAC across four roles with branch-level data scoping, identity derived from the JWT. Schema-first backend with hand-written SQL migrations, full audit logging and status-based soft deletion. Jest/Supertest integration suites; containerised via Podman Compose.",
     features: [
       "Role-based access control across four roles with branch-level data scoping",
@@ -107,6 +127,9 @@ export const PROJECTS = [
     title: "QuizzMaker",
     subtitle: "Live Quiz and Learning Analytics Platform",
     image: quizzMakerImg,
+    gallery: QUIZZMAKER_GALLERY,
+    problem: "Live classroom quizzes break when connections drop and timers drift between devices.",
+    outcome: "Reconnect-safe sessions with a server-authoritative timer, in production on Railway and Vercel.",
     description: "Real-time, teacher-led quiz platform built on a WebSocket engine with reconnect-safe sessions and a server-authoritative timer that enforces deadlines from a shared UTC timestamp. Analytics module produces per-topic breakdowns, class statistics, student ranking and cross-quiz at-risk identification, with CSV/Excel export. Integrates an LLM API to convert pasted text into structured MCQs. Deployed to production (FastAPI on Railway, React on Vercel) and packaged as a signed native Android app.",
     features: [
       "WebSocket engine with reconnect-safe live quiz sessions",
@@ -123,6 +146,8 @@ export const PROJECTS = [
     title: "AI-Enabled Logistics Management System",
     subtitle: "End-to-End Shipment & Inventory Tracking",
     image: project2,
+    problem: "Shipments, inventory and deliveries were tracked in separate places, with little visibility across the chain.",
+    outcome: "One real-time dashboard for tracking, inventory and delivery scheduling.",
     description: "End-to-end logistics tracking system with AI/ML-supported decision features, improving operational visibility. Implemented real-time updates and a user-friendly dashboard for shipment tracking, inventory management, and delivery scheduling across the supply chain.",
     features: [
       "Real-time shipment tracking dashboard",

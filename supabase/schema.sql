@@ -18,6 +18,11 @@ create table if not exists public.projects (
   created_at timestamptz not null default now()
 );
 
+-- Added later; safe to re-run on an existing table.
+alter table public.projects add column if not exists gallery_urls text[] not null default '{}';
+alter table public.projects add column if not exists problem text;
+alter table public.projects add column if not exists outcome text;
+
 alter table public.projects enable row level security;
 
 create or replace function public.is_portfolio_admin()

@@ -22,3 +22,7 @@ Projects are managed from `/admin` and stored in [Supabase](https://supabase.com
 7. Open `/admin`, sign in, and click **Import current projects** to copy the built-in projects (with their screenshots and video) into the database.
 
 After that, adding, editing, reordering or deleting a project in `/admin` updates the live site immediately — no redeploy needed.
+
+### Upgrading an existing database
+
+If you ran `schema.sql` before gallery screenshots were added, run it again in **SQL Editor**. It is safe to re-run and only adds the missing `gallery_urls`, `problem` and `outcome` columns.

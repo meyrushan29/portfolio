@@ -72,15 +72,14 @@ const Dashboard = ({ session }) => {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const load = useCallback(async () => {
-    try {
-      setProjects(await fetchProjects());
-    } catch (e) {
-      setError(e.message);
-    }
-  }, []);
+  const load = useCallback(
+    () => fetchProjects().then(setProjects, (e) => setError(e.message)),
+    []
+  );
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const run = async (action) => {
     setBusy(true);
@@ -137,7 +136,11 @@ const Dashboard = ({ session }) => {
       const slug = p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       const image = await uploadAsset(p.image, slug);
       const video = await uploadAsset(p.video, `${slug}-video`);
-      const { error } = await supabase.from("projects").insert(toRow({ ...p, image, video, sortOrder: i }));
+      const gallery = [];
+      for (const [j, url] of (p.gallery || []).entries()) {
+        gallery.push(await uploadAsset(url, `${slug}-${String(j + 1).padStart(2, "0")}`));
+      }
+      const { error } = await supabase.from("projects").insert(toRow({ ...p, image, video, gallery, sortOrder: i }));
       if (error) throw error;
     }
   });
