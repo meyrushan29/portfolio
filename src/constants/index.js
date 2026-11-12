@@ -91,6 +91,8 @@ export const PROJECTS = [
     video: hydrationVideo,
     problem: "Hydration advice is generic, but need changes hour by hour and most people cannot tell when they are already dehydrated.",
     outcome: "Peer-reviewed at CISCON 2026 and published in IEEE Xplore.",
+    role: "Final-year research project, SLIIT",
+    facts: ["2 ML models", "SHAP and Grad-CAM explanations", "Flutter app, Python service", "IEEE Xplore paper"],
     description: "Final-year research project: a mobile hydration-monitoring app with a user-centred interface, applying machine learning to forecast hydration needs and detect dehydration from lip imagery. Basis of the CISCON 2026 paper on sub-daily hydration forecasting and lip-based dehydration detection, now published in IEEE Xplore.",
     features: [
       "Sub-daily hydration forecasting model",
@@ -111,6 +113,8 @@ export const PROJECTS = [
     gallery: STAFF_MANAGEMENT_GALLERY,
     problem: "A tutoring business tracked revenue, targets, attendance and leave on whiteboards and spreadsheets.",
     outcome: "One API, an admin console and a field app, with four roles and branch-level data scoping.",
+    role: "Full-stack build for a tutoring business",
+    facts: ["3 clients: API, admin console, mobile app", "4 roles, branch-level scoping", "Full audit log", "Jest and Supertest suites"],
     description: "Three-client full-stack system replacing a manual, whiteboard-based process at a tutoring business: a REST API, a React admin console and a React Native (Expo) mobile app for field staff. Server-side RBAC across four roles with branch-level data scoping, identity derived from the JWT. Schema-first backend with hand-written SQL migrations, full audit logging and status-based soft deletion. Jest/Supertest integration suites; containerised via Podman Compose.",
     features: [
       "Role-based access control across four roles with branch-level data scoping",
@@ -130,6 +134,8 @@ export const PROJECTS = [
     gallery: QUIZZMAKER_GALLERY,
     problem: "Live classroom quizzes break when connections drop and timers drift between devices.",
     outcome: "Reconnect-safe sessions with a server-authoritative timer, in production on Railway and Vercel.",
+    role: "Full-stack build, deployed to production",
+    facts: ["Live sessions over WebSockets", "Server-authoritative timer", "LLM turns text into MCQs", "Signed Android app"],
     description: "Real-time, teacher-led quiz platform built on a WebSocket engine with reconnect-safe sessions and a server-authoritative timer that enforces deadlines from a shared UTC timestamp. Analytics module produces per-topic breakdowns, class statistics, student ranking and cross-quiz at-risk identification, with CSV/Excel export. Integrates an LLM API to convert pasted text into structured MCQs. Deployed to production (FastAPI on Railway, React on Vercel) and packaged as a signed native Android app.",
     features: [
       "WebSocket engine with reconnect-safe live quiz sessions",
@@ -148,6 +154,8 @@ export const PROJECTS = [
     image: project2,
     problem: "Shipments, inventory and deliveries were tracked in separate places, with little visibility across the chain.",
     outcome: "One real-time dashboard for tracking, inventory and delivery scheduling.",
+    role: "Full-stack build on the MERN stack",
+    facts: ["Real-time shipment tracking", "AI/ML decision support", "Inventory and scheduling in one place"],
     description: "End-to-end logistics tracking system with AI/ML-supported decision features, improving operational visibility. Implemented real-time updates and a user-friendly dashboard for shipment tracking, inventory management, and delivery scheduling across the supply chain.",
     features: [
       "Real-time shipment tracking dashboard",

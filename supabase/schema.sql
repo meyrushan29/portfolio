@@ -22,6 +22,8 @@ create table if not exists public.projects (
 alter table public.projects add column if not exists gallery_urls text[] not null default '{}';
 alter table public.projects add column if not exists problem text;
 alter table public.projects add column if not exists outcome text;
+alter table public.projects add column if not exists role text;
+alter table public.projects add column if not exists facts text[] not null default '{}';
 
 alter table public.projects enable row level security;
 

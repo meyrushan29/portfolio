@@ -51,13 +51,15 @@ const Navbar = ({ active, scrolled }) => {
   const solid = scrolled || isMenuOpen;
 
   return (
-    <nav className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${solid ? "border-b border-line bg-bg/85 backdrop-blur-md" : "border-b border-transparent"}`}>
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <a href="#" className="font-display text-lg font-semibold tracking-tight text-ink">
+    <nav className="fixed inset-x-3 top-3 z-50 sm:inset-x-6 sm:top-4">
+      <div className={`glass mx-auto max-w-6xl transition-[border-radius,box-shadow] duration-300 ${isMenuOpen ? "rounded-[1.75rem]" : "rounded-full"} ${solid ? "shadow-[0_18px_40px_-24px_rgb(0_0_0/0.35)]" : ""}`}>
+      <div className="flex h-14 items-center justify-between gap-4 px-4 sm:px-5">
+        <a href="#" className="flex items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-ink">
+          <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-water" />
           Meyrushan Nadarajan
         </a>
 
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {SECTIONS.map((link) => {
             const isActive = active === link.href;
             return (
@@ -65,7 +67,7 @@ const Navbar = ({ active, scrolled }) => {
                 key={link.name}
                 href={link.href}
                 aria-current={isActive ? "true" : undefined}
-                className={`text-sm font-medium transition-colors hover:text-accent ${isActive ? "text-ink" : "text-body"}`}
+                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors hover:text-accent ${isActive ? "bg-accent-soft text-ink" : "text-body"}`}
               >
                 {link.name}
               </a>
@@ -95,9 +97,9 @@ const Navbar = ({ active, scrolled }) => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-line lg:hidden"
+            className="overflow-hidden border-t border-line/80 lg:hidden"
           >
-            <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 sm:px-6">
+            <div className="flex flex-col gap-1 px-5 py-4">
               {SECTIONS.map((link) => (
                 <a
                   key={link.name}
@@ -114,6 +116,7 @@ const Navbar = ({ active, scrolled }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </nav>
   );
 };

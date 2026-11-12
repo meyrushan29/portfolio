@@ -2,7 +2,7 @@ import { useState } from "react";
 import { uploadMedia } from "../lib/projects";
 
 const empty = {
-  title: "", subtitle: "", problem: "", outcome: "", description: "", features: [], technologies: [],
+  title: "", subtitle: "", role: "", problem: "", outcome: "", description: "", features: [], technologies: [], facts: [],
   image: "", gallery: [], video: "", github: "", demo: "", paper: "", featured: false,
 };
 
@@ -118,6 +118,7 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
   const [form, setForm] = useState(() => ({ ...empty, ...initial }));
   const [featuresText, setFeaturesText] = useState((initial?.features || []).join("\n"));
   const [techText, setTechText] = useState((initial?.technologies || []).join(", "));
+  const [factsText, setFactsText] = useState((initial?.facts || []).join("\n"));
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -127,6 +128,7 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
       ...form,
       features: featuresText.split("\n").map((s) => s.trim()).filter(Boolean),
       technologies: techText.split(",").map((s) => s.trim()).filter(Boolean),
+      facts: factsText.split("\n").map((s) => s.trim()).filter(Boolean),
     });
   };
 
@@ -148,6 +150,9 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
         <Field label="Subtitle" htmlFor="p-subtitle">
           <input id="p-subtitle" value={form.subtitle} onChange={set("subtitle")} className="admin-input" />
         </Field>
+        <Field label="Your role" htmlFor="p-role" hint="Short, e.g. Full-stack build for a tutoring business">
+          <input id="p-role" value={form.role} onChange={set("role")} className="admin-input" />
+        </Field>
         <div className="grid gap-6 sm:grid-cols-2">
           <Field label="The problem" htmlFor="p-problem" hint="One sentence: what was broken or missing before.">
             <textarea id="p-problem" rows={3} value={form.problem} onChange={set("problem")} className="admin-input resize-y" />
@@ -159,7 +164,10 @@ const ProjectForm = ({ initial, busy, error, onSave, onCancel }) => {
         <Field label="Description" htmlFor="p-description">
           <textarea id="p-description" rows={5} value={form.description} onChange={set("description")} className="admin-input resize-y" />
         </Field>
-        <Field label="Key features" htmlFor="p-features" hint="One per line. Shown as a checklist on the featured project.">
+        <Field label="Key facts" htmlFor="p-facts" hint="One per line, a few words each. Shown as pills under the screenshots, e.g. 4 roles, branch-level scoping">
+          <textarea id="p-facts" rows={3} value={factsText} onChange={(e) => setFactsText(e.target.value)} className="admin-input resize-y" />
+        </Field>
+        <Field label="What you built" htmlFor="p-features" hint="One per line. Shown as a checklist on every project.">
           <textarea id="p-features" rows={4} value={featuresText} onChange={(e) => setFeaturesText(e.target.value)} className="admin-input resize-y" />
         </Field>
         <Field label="Technologies" htmlFor="p-tech" hint="Separate with commas, e.g. React, Node.js, MongoDB">

@@ -1,16 +1,8 @@
 import { useState } from "react";
 import { useProjects } from "../lib/projects";
-import { FaGithub, FaExternalLinkAlt, FaCheck, FaImages } from "react-icons/fa";
-import SectionHeading from "./SectionHeading";
+import { FaGithub, FaExternalLinkAlt, FaCheck, FaImages, FaPlay } from "react-icons/fa";
 import Lightbox from "./Lightbox";
-
-const TechTags = ({ technologies }) => (
-  <ul className="flex flex-wrap gap-2">
-    {technologies.map((tech) => (
-      <li key={tech} className="tag">{tech}</li>
-    ))}
-  </ul>
-);
+import { spotlight } from "../lib/useSpotlight";
 
 const ProjectLinks = ({ project, onOpenGallery }) => {
   const links = [
@@ -30,7 +22,7 @@ const ProjectLinks = ({ project, onOpenGallery }) => {
       ))}
       {galleryCount > 0 && (
         <button type="button" onClick={() => onOpenGallery(0)} className="text-link">
-          View {galleryCount} screenshots <FaImages className="text-xs" />
+          View all {galleryCount} screenshots <FaImages className="text-xs" />
         </button>
       )}
     </div>
@@ -41,20 +33,68 @@ const ProjectLinks = ({ project, onOpenGallery }) => {
 const ProblemOutcome = ({ project }) => {
   if (!project.problem && !project.outcome) return null;
   return (
-    <dl className="mt-5 grid gap-4 border-y border-line py-5 sm:grid-cols-2">
+    <dl className="mt-6 grid gap-5 rounded-2xl bg-surface-alt/60 p-5 sm:grid-cols-2">
       {project.problem && (
         <div>
-          <dt className="text-sm font-medium text-faint">Problem</dt>
-          <dd className="mt-1 text-sm leading-relaxed text-body sm:text-base">{project.problem}</dd>
+          <dt className="text-sm font-medium text-faint">The problem</dt>
+          <dd className="mt-1 leading-relaxed text-body">{project.problem}</dd>
         </div>
       )}
       {project.outcome && (
         <div>
-          <dt className="text-sm font-medium text-water">Outcome</dt>
-          <dd className="mt-1 text-sm leading-relaxed text-ink sm:text-base">{project.outcome}</dd>
+          <dt className="text-sm font-medium text-water">The outcome</dt>
+          <dd className="mt-1 leading-relaxed text-ink">{project.outcome}</dd>
         </div>
       )}
     </dl>
+  );
+};
+
+const Features = ({ features }) => {
+  if (!features?.length) return null;
+  return (
+    <div className="mt-7">
+      <h4 className="text-sm font-medium text-faint">What I built</h4>
+      <ul className="mt-3 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-start gap-3 text-sm leading-relaxed text-body">
+            <span className="mt-1 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-water-soft text-[9px] text-water">
+              <FaCheck />
+            </span>
+            {feature}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const Stack = ({ technologies }) => {
+  if (!technologies?.length) return null;
+  return (
+    <div>
+      <h4 className="text-sm font-medium text-faint">Stack</h4>
+      <ul className="mt-2.5 flex flex-wrap gap-2">
+        {technologies.map((tech) => (
+          <li key={tech} className="tag">{tech}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// Short facts under the screenshots: scope, scale, and what makes it notable.
+const Facts = ({ facts }) => {
+  if (!facts?.length) return null;
+  return (
+    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Key facts">
+      {facts.map((fact) => (
+        <li key={fact} className="inline-flex items-center gap-2 rounded-full border border-water/30 bg-water-soft/60 px-3 py-1 text-xs font-medium text-ink">
+          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-water" />
+          {fact}
+        </li>
+      ))}
+    </ul>
   );
 };
 
@@ -88,94 +128,91 @@ const ThumbStrip = ({ project, onOpen }) => {
   );
 };
 
-// Main image; clicking opens the gallery when the project has one.
-const Cover = ({ project, onOpen, className }) => {
+// Main image or demo video; clicking an image opens the gallery when there is one.
+const Media = ({ project, onOpen }) => {
+  if (project.video) {
+    return (
+      <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-surface-alt">
+        <video
+          src={project.video}
+          poster={project.image}
+          controls
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="max-h-[520px] w-full object-contain"
+        />
+      </div>
+    );
+  }
   const hasGallery = (project.gallery?.length ?? 0) > 0;
   const img = project.image ? (
-    <img src={project.image} alt={`${project.title} screenshot`} loading="lazy" className={className} />
+    <img
+      src={project.image}
+      alt={`${project.title} screenshot`}
+      loading="lazy"
+      className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 [transition-timing-function:var(--ease-out-quint)] group-hover/img:scale-[1.03]"
+    />
   ) : (
     <div className="flex aspect-[16/10] items-center justify-center p-6 text-center font-display text-xl text-faint">{project.title}</div>
   );
-  if (!hasGallery || !project.image) return img;
   return (
-    <button
-      type="button"
-      onClick={() => onOpen(0)}
-      aria-label={`View ${project.title} screenshots`}
-      className="group/cover relative block w-full cursor-zoom-in"
-    >
-      {img}
-      <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full bg-ink/75 px-3 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity group-hover/cover:opacity-100 group-focus-visible/cover:opacity-100">
-        <FaImages /> {project.gallery.length} screenshots
-      </span>
-    </button>
+    <div className="group/img overflow-hidden rounded-[1.25rem] border border-line bg-surface-alt">
+      {hasGallery && project.image ? (
+        <button
+          type="button"
+          onClick={() => onOpen(0)}
+          aria-label={`View ${project.title} screenshots`}
+          className="group/cover relative block w-full cursor-zoom-in"
+        >
+          {img}
+          <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full bg-ink/75 px-3 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity group-hover/cover:opacity-100 group-focus-visible/cover:opacity-100">
+            <FaImages /> {project.gallery.length} screenshots
+          </span>
+        </button>
+      ) : img}
+    </div>
   );
 };
 
-const FeaturedProject = ({ project, onOpen }) => (
-  <article className="grid gap-8 rounded-[1.75rem] border border-line bg-surface p-5 sm:p-8 lg:grid-cols-12 lg:gap-10">
+// One full case study. Every project gets the same depth; the featured one
+// comes first with a label and the research tint.
+const ProjectCase = ({ project, index, onOpen }) => (
+  <article
+    {...spotlight}
+    className={`spot grid gap-8 rounded-[1.75rem] border bg-surface p-5 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_30px_60px_-40px_var(--water)] sm:p-8 lg:grid-cols-12 lg:gap-10 ${
+      project.featured ? "border-water/40 hover:border-water/70" : "border-line hover:border-water/60"
+    }`}
+  >
     <div className="lg:col-span-5">
-      <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-surface-alt">
-        {project.video ? (
-          <video
-            src={project.video}
-            poster={project.image}
-            controls
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="max-h-[560px] w-full object-contain"
-          />
-        ) : (
-          <Cover project={project} onOpen={onOpen} className="max-h-[560px] w-full object-contain" />
-        )}
-      </div>
+      <Media project={project} onOpen={onOpen} />
       <ThumbStrip project={project} onOpen={onOpen} />
+      <Facts facts={project.facts} />
     </div>
 
     <div className="flex flex-col lg:col-span-7">
-      <p className="text-sm font-medium text-water">Featured research project</p>
-      <h3 className="mt-2 font-display text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">{project.title}</h3>
+      <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+        <span className="tabular-nums text-faint">{String(index + 1).padStart(2, "0")}</span>
+        {project.featured && (
+          <span className="inline-flex items-center gap-1.5 font-medium text-water">
+            <FaPlay className="text-[9px]" aria-hidden="true" /> Featured research project
+          </span>
+        )}
+        {project.role && <span className="text-faint">{project.role}</span>}
+      </p>
+      <h3 className="mt-2 font-display text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-4xl">{project.title}</h3>
       {project.subtitle && <p className="mt-2 text-lg text-body">{project.subtitle}</p>}
-      <ProblemOutcome project={project} />
-      <p className="mt-5 leading-relaxed text-faint">{project.description}</p>
-      {project.features?.length > 0 && (
-        <ul className="mt-6 flex flex-col gap-3">
-          {project.features.map((feature) => (
-            <li key={feature} className="flex items-start gap-3 text-sm text-body">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-water-soft text-[10px] text-water">
-                <FaCheck />
-              </span>
-              {feature}
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="mt-8 flex flex-col gap-5 lg:mt-auto lg:pt-8">
-        <ProjectLinks project={project} onOpenGallery={onOpen} />
-        <TechTags technologies={project.technologies} />
-      </div>
-    </div>
-  </article>
-);
 
-const ProjectRow = ({ project, onOpen }) => (
-  <article className="grid gap-6 border-t border-line py-12 md:grid-cols-12 md:gap-10">
-    <div className="md:col-span-5">
-      <div className="overflow-hidden rounded-[1.25rem] border border-line bg-surface-alt">
-        <Cover project={project} onOpen={onOpen} className="aspect-[16/10] w-full object-cover object-top" />
-      </div>
-      <ThumbStrip project={project} onOpen={onOpen} />
-    </div>
-    <div className="md:col-span-7">
-      <h3 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{project.title}</h3>
-      {project.subtitle && <p className="mt-1 text-base text-faint">{project.subtitle}</p>}
       <ProblemOutcome project={project} />
-      <p className="mt-5 max-w-2xl text-sm leading-relaxed text-body sm:text-base">{project.description}</p>
-      <div className="mt-6 flex flex-col gap-4">
+
+      {project.description && <p className="mt-6 leading-relaxed text-faint">{project.description}</p>}
+
+      <Features features={project.features} />
+
+      <div className="mt-8 flex flex-col gap-6 border-t border-line pt-6 lg:mt-auto">
+        <Stack technologies={project.technologies} />
         <ProjectLinks project={project} onOpenGallery={onOpen} />
-        <TechTags technologies={project.technologies} />
       </div>
     </div>
   </article>
@@ -183,33 +220,28 @@ const ProjectRow = ({ project, onOpen }) => (
 
 const Project = () => {
   const projects = useProjects();
-  const featured = projects?.find((p) => p.featured);
-  const rest = projects?.filter((p) => p !== featured) ?? [];
+  const ordered = projects ? [...projects].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)) : [];
   // { project, index } while the lightbox is open.
   const [viewing, setViewing] = useState(null);
   const openFor = (project) => (index) => setViewing({ project, index });
 
   return (
     <section id="projects" className="border-t border-line py-20 lg:py-28">
-      <div className="case-grid">
-        <SectionHeading
-          title="Projects"
-          intro="Case studies: the problem each one solved, what exists now, and the screenshots to prove it."
-        />
-        <div className="case-body">
-          {!projects ? (
-            <div aria-busy="true" aria-label="Loading projects" className="h-[480px] animate-pulse rounded-[1.75rem] bg-surface-alt" />
-          ) : (
-            <>
-              {featured && <FeaturedProject project={featured} onOpen={openFor(featured)} />}
-              <div className="mt-12">
-                {rest.map((project) => (
-                  <ProjectRow key={project.id || project.title} project={project} onOpen={openFor(project)} />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+      {/* Full-width cards: this is the section that carries the most detail. */}
+      <div className="mb-12 grid gap-4 md:grid-cols-12 md:items-end">
+        <h2 className="font-display text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl md:col-span-6">Projects</h2>
+        <p className="max-w-md text-base leading-relaxed text-faint md:col-span-6 md:justify-self-end">
+          Full case studies: the problem, what I built, the stack, and the screenshots to prove it.
+        </p>
+      </div>
+      <div className="flex flex-col gap-8">
+        {!projects ? (
+          <div aria-busy="true" aria-label="Loading projects" className="h-[480px] animate-pulse rounded-[1.75rem] bg-surface-alt" />
+        ) : (
+          ordered.map((project, i) => (
+            <ProjectCase key={project.id || project.title} project={project} index={i} onOpen={openFor(project)} />
+          ))
+        )}
       </div>
 
       <Lightbox

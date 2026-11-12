@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PUBLICATIONS } from "../constants";
 import { FaCheck, FaRegCopy, FaExternalLinkAlt, FaCertificate } from "react-icons/fa";
 import SectionHeading from "./SectionHeading";
+import { spotlight } from "../lib/useSpotlight";
 
 const CopyDoi = ({ doi }) => {
   const [copied, setCopied] = useState(false);
@@ -32,7 +33,7 @@ const CopyDoi = ({ doi }) => {
 // The evidence panel: a light surface with a water-coloured edge, so it reads
 // as proof rather than as another card.
 const Publication = ({ pub }) => (
-  <article className="overflow-hidden rounded-[1.75rem] border border-line border-l-4 border-l-water bg-surface">
+  <article {...spotlight} className="spot overflow-hidden rounded-[1.75rem] border border-line border-l-4 border-l-water bg-surface">
     <div className="grid gap-10 p-6 sm:p-10 lg:grid-cols-12">
       <div className="lg:col-span-8">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-faint">

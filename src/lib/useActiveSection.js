@@ -4,6 +4,7 @@ export const SECTIONS = [
   { name: "Research", href: "#research" },
   { name: "Projects", href: "#projects" },
   { name: "Experience", href: "#experience" },
+  { name: "Education", href: "#education" },
   { name: "About", href: "#about" },
   { name: "Skills", href: "#skills" },
   { name: "Contact", href: "#contact" },

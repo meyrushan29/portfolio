@@ -25,4 +25,4 @@ After that, adding, editing, reordering or deleting a project in `/admin` update
 
 ### Upgrading an existing database
 
-If you ran `schema.sql` before gallery screenshots were added, run it again in **SQL Editor**. It is safe to re-run and only adds the missing `gallery_urls`, `problem` and `outcome` columns.
+If you ran `schema.sql` before gallery screenshots were added, run it again in **SQL Editor**. It is safe to re-run and only adds the missing `gallery_urls`, `problem`, `outcome`, `role` and `facts` columns.
