@@ -5,9 +5,11 @@ import hydrationImg from "../assets/Well360_Demo/well360-poster.webp";
 import hydrationVideo from "../assets/Well360_Demo/well360-demo.mp4";
 import certificateImg from "../assets/Publication_Certificate.webp";
 
-// Every screenshot in a folder, in filename order, as built URLs.
-const screenshots = (modules) =>
+// Every screenshot in a folder, in filename order, as built URLs. `skip`
+// drops files by name (matched against the source path, not the built URL).
+const screenshots = (modules, skip = []) =>
   Object.entries(modules)
+    .filter(([path]) => !skip.some((name) => path.includes(name)))
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, url]) => url);
 
@@ -16,8 +18,9 @@ const STAFF_MANAGEMENT_GALLERY = screenshots(
 );
 // 01-home is a near-blank loading frame, so it is skipped.
 const QUIZZMAKER_GALLERY = screenshots(
-  import.meta.glob("../assets/QuizzMaker-Screenshots/*.webp", { eager: true, import: "default" })
-).filter((url) => !url.includes("01-home"));
+  import.meta.glob("../assets/QuizzMaker-Screenshots/*.webp", { eager: true, import: "default" }),
+  ["01-home"]
+);
 
 export const HERO_ROLE = "Software engineer building full-stack products and explainable machine learning that runs on phones.";
 

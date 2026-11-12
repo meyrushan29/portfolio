@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaArrowUp, FaArrowDown, FaPen, FaTrash, FaPlus, FaStar, FaExternalLinkAlt, FaSignOutAlt, FaSyncAlt } from "react-icons/fa";
 import { supabase } from "../lib/supabase";
 import { fetchProjects, toRow, uploadMedia } from "../lib/projects";
@@ -82,7 +82,8 @@ async function uploadAsset(url, name) {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Could not read ${url} (${res.status})`);
     const blob = await res.blob();
-    const ext = url.split("?")[0].split(".").pop();
+    // From the MIME type, so data: URLs and query strings cannot leak into the file name.
+    const ext = (blob.type.split("/")[1] || "bin").replace(/[^a-z0-9]/gi, "").toLowerCase();
     return uploadMedia(new File([blob], `${name}.${ext}`, { type: blob.type }));
   });
 }
@@ -92,7 +93,12 @@ const Dashboard = ({ session }) => {
   const [editing, setEditing] = useState(null); // null | "new" | project
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [progress, setProgress] = useState("");
+  const [progress, setProgressState] = useState("");
+  const progressRef = useRef("");
+  const setProgress = (text) => {
+    progressRef.current = text;
+    setProgressState(text);
+  };
 
   const load = useCallback(
     () => fetchProjects().then(setProjects, (e) => setError(e.message)),
@@ -110,7 +116,8 @@ const Dashboard = ({ session }) => {
       await action();
       await load();
     } catch (e) {
-      setError(e.message);
+      console.error(e);
+      setError(progressRef.current ? `${progressRef.current}: ${e.message}` : e.message);
     } finally {
       setBusy(false);
       setProgress("");
