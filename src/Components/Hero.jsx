@@ -32,7 +32,9 @@ const Line = ({ children, delay }) => (
 const Name = () => {
   const x = useMotionValue(0);
   const spring = useSpring(x, { stiffness: 110, damping: 22, mass: 0.6 });
-  const fontStretch = useTransform(spring, [0, 1], ["75%", "96%"]);
+  // Whole-percent steps: each distinct width costs a fresh glyph raster for
+  // 200px letters, so limiting it to ~21 steps keeps the sweep smooth.
+  const fontStretch = useTransform(spring, (v) => `${Math.round(75 + v * 21)}%`);
 
   return (
     <motion.h1
@@ -43,7 +45,7 @@ const Name = () => {
         x.set(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)));
       }}
       onPointerLeave={() => x.set(0)}
-      className="w-fit cursor-default select-none font-display text-[clamp(3.5rem,14.5vw,13.5rem)] font-bold uppercase leading-[0.84] tracking-[-0.035em] text-ink"
+      className="w-fit cursor-default select-none font-display text-[clamp(3.5rem,14.5vw,13.5rem)] font-bold uppercase leading-[0.84] tracking-[-0.035em] text-ink [contain:layout_style]"
     >
       <Line delay={0.05}>Meyrushan</Line>
       <Line delay={0.18}>Nadarajan</Line>
