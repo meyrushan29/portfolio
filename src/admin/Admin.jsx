@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FaArrowUp, FaArrowDown, FaPen, FaTrash, FaPlus, FaStar, FaExternalLinkAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown, FaPen, FaTrash, FaPlus, FaStar, FaExternalLinkAlt, FaSignOutAlt, FaSyncAlt } from "react-icons/fa";
 import { supabase } from "../lib/supabase";
 import { fetchProjects, toRow, uploadMedia } from "../lib/projects";
 import { PROJECTS } from "../constants";
@@ -131,7 +131,7 @@ const Dashboard = ({ session }) => {
     if (failed) throw failed.error;
   });
 
-  const importCurrent = () => run(async () => {
+  const importBuiltIn = async () => {
     for (const [i, p] of PROJECTS.entries()) {
       const slug = p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       const image = await uploadAsset(p.image, slug);
@@ -143,7 +143,23 @@ const Dashboard = ({ session }) => {
       const { error } = await supabase.from("projects").insert(toRow({ ...p, image, video, gallery, sortOrder: i }));
       if (error) throw error;
     }
-  });
+  };
+
+  const importCurrent = () => run(importBuiltIn);
+
+  // Replaces everything in the database with the built-in projects from the
+  // code, so new fields added in constants show up without editing each row.
+  const resetToBuiltIn = () => {
+    const ok = window.confirm(
+      `Delete all ${projects.length} projects in the database and import the ${PROJECTS.length} built-in projects again? Edits made here will be lost.`
+    );
+    if (!ok) return;
+    run(async () => {
+      const { error } = await supabase.from("projects").delete().not("id", "is", null);
+      if (error) throw error;
+      await importBuiltIn();
+    });
+  };
 
   if (editing) {
     return (
@@ -174,8 +190,13 @@ const Dashboard = ({ session }) => {
 
       {error && <p role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
 
-      <div className="mt-10 flex flex-wrap gap-3">
+      <div className="mt-10 flex flex-wrap items-center gap-3">
         <button type="button" onClick={() => setEditing("new")} disabled={busy} className="btn-primary disabled:opacity-60"><FaPlus className="text-xs" /> Add project</button>
+        {projects?.length > 0 && (
+          <button type="button" onClick={resetToBuiltIn} disabled={busy} className="btn-secondary disabled:opacity-60">
+            <FaSyncAlt className="text-xs" /> {busy ? "Working..." : "Delete all and re-import built-in projects"}
+          </button>
+        )}
       </div>
 
       {!projects ? (
