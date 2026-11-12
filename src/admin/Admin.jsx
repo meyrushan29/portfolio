@@ -58,12 +58,33 @@ const Login = () => {
   );
 };
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Runs fn up to `tries` times; a flaky connection mid-import ("Failed to
+// fetch") should not abandon the whole run.
+async function withRetry(fn, tries = 4) {
+  let last;
+  for (let attempt = 1; attempt <= tries; attempt++) {
+    try {
+      return await fn();
+    } catch (e) {
+      last = e;
+      if (attempt < tries) await sleep(700 * attempt);
+    }
+  }
+  throw last;
+}
+
 // Uploads a bundled asset (e.g. a screenshot imported in constants) to storage.
 async function uploadAsset(url, name) {
   if (!url) return null;
-  const blob = await (await fetch(url)).blob();
-  const ext = url.split("?")[0].split(".").pop();
-  return uploadMedia(new File([blob], `${name}.${ext}`, { type: blob.type }));
+  return withRetry(async () => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Could not read ${url} (${res.status})`);
+    const blob = await res.blob();
+    const ext = url.split("?")[0].split(".").pop();
+    return uploadMedia(new File([blob], `${name}.${ext}`, { type: blob.type }));
+  });
 }
 
 const Dashboard = ({ session }) => {
@@ -71,6 +92,7 @@ const Dashboard = ({ session }) => {
   const [editing, setEditing] = useState(null); // null | "new" | project
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState("");
 
   const load = useCallback(
     () => fetchProjects().then(setProjects, (e) => setError(e.message)),
@@ -91,6 +113,7 @@ const Dashboard = ({ session }) => {
       setError(e.message);
     } finally {
       setBusy(false);
+      setProgress("");
     }
   };
 
@@ -131,21 +154,38 @@ const Dashboard = ({ session }) => {
     if (failed) throw failed.error;
   });
 
+  // Imports the built-in projects that are not in the database yet (matched
+  // by title), so a run that stopped half way can simply be started again.
   const importBuiltIn = async () => {
-    for (const [i, p] of PROJECTS.entries()) {
+    const { data: existing, error: readError } = await supabase.from("projects").select("title");
+    if (readError) throw readError;
+    const have = new Set((existing || []).map((r) => r.title));
+    const todo = PROJECTS.filter((p) => !have.has(p.title));
+
+    for (const [n, p] of todo.entries()) {
+      const label = `${p.title} (${n + 1} of ${todo.length})`;
       const slug = p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      setProgress(`${label}: uploading cover`);
       const image = await uploadAsset(p.image, slug);
+      if (p.video) setProgress(`${label}: uploading video`);
       const video = await uploadAsset(p.video, `${slug}-video`);
       const gallery = [];
       for (const [j, url] of (p.gallery || []).entries()) {
+        setProgress(`${label}: screenshot ${j + 1} of ${p.gallery.length}`);
         gallery.push(await uploadAsset(url, `${slug}-${String(j + 1).padStart(2, "0")}`));
       }
-      const { error } = await supabase.from("projects").insert(toRow({ ...p, image, video, gallery, sortOrder: i }));
+      setProgress(`${label}: saving`);
+      const sortOrder = PROJECTS.indexOf(p);
+      const { error } = await withRetry(() => supabase.from("projects").insert(toRow({ ...p, image, video, gallery, sortOrder })));
       if (error) throw error;
     }
   };
 
   const importCurrent = () => run(importBuiltIn);
+
+  const missingBuiltIn = projects
+    ? PROJECTS.filter((p) => !projects.some((row) => row.title === p.title))
+    : [];
 
   // Replaces everything in the database with the built-in projects from the
   // code, so new fields added in constants show up without editing each row.
@@ -155,7 +195,8 @@ const Dashboard = ({ session }) => {
     );
     if (!ok) return;
     run(async () => {
-      const { error } = await supabase.from("projects").delete().not("id", "is", null);
+      setProgress("Deleting existing projects");
+      const { error } = await withRetry(() => supabase.from("projects").delete().not("id", "is", null));
       if (error) throw error;
       await importBuiltIn();
     });
@@ -192,12 +233,22 @@ const Dashboard = ({ session }) => {
 
       <div className="mt-10 flex flex-wrap items-center gap-3">
         <button type="button" onClick={() => setEditing("new")} disabled={busy} className="btn-primary disabled:opacity-60"><FaPlus className="text-xs" /> Add project</button>
+        {missingBuiltIn.length > 0 && projects?.length > 0 && (
+          <button type="button" onClick={importCurrent} disabled={busy} className="btn-secondary disabled:opacity-60">
+            <FaPlus className="text-xs" /> Import {missingBuiltIn.length} missing built-in {missingBuiltIn.length === 1 ? "project" : "projects"}
+          </button>
+        )}
         {projects?.length > 0 && (
           <button type="button" onClick={resetToBuiltIn} disabled={busy} className="btn-secondary disabled:opacity-60">
-            <FaSyncAlt className="text-xs" /> {busy ? "Working..." : "Delete all and re-import built-in projects"}
+            <FaSyncAlt className="text-xs" /> Delete all and re-import built-in projects
           </button>
         )}
       </div>
+      {progress && (
+        <p aria-live="polite" className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent-soft px-4 py-2 text-sm text-ink">
+          <FaSyncAlt className="animate-spin text-xs text-accent" /> {progress}
+        </p>
+      )}
 
       {!projects ? (
         <p className="mt-10 text-faint">Loading projects...</p>
